@@ -242,6 +242,12 @@ namespace ORB_SLAM3
 
     void System::parseJsonDatabase(string jsonFilePath)
     {
+        // Skip the parsing
+        if (jsonFilePath.empty())
+        {
+            std::cout << "- No JSON file describing the environment is provided. Skipping ..." << std::endl;
+            return;
+        }
         // Creating an object of the database loader
         ORB_SLAM3::DBParser parser;
         // Load JSON file
