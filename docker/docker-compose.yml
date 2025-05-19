@@ -1,0 +1,38 @@
+services:
+  vsgraphs:
+    image: vsgraphs
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vsgraphs
+    environment:
+      DISPLAY: $DISPLAY
+      XAUTHORITY: $XAUTHORITY
+      SSH_AUTH_SOCK: $SSH_AUTH_SOCK
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+      TERM: $TERM
+      SHELL: $SHELL
+    runtime: nvidia
+    privileged: true
+    restart: always
+    volumes:
+      # Display
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # - ~/.Xauthority:/root/.Xauthority:rw
+      - $XAUTHORITY:$XAUTHORITY:rw
+      # SSH
+      - $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      # TMUX
+      - ~/.tmux:/root/.tmux:ro
+      - ~/.tmux.conf:/root/.tmux.conf:ro
+      # Git
+      - ~/.gitconfig:/root/.gitconfig_local
+      # Dev
+      - /dev:/dev:rw
+      # Working dirs
+      # - [path/to/launchers]:/launchers
+      # Datasets
+      - "[dataset/path]:/root/datasets"
+    network_mode: "host"
+    command: tail -f /dev/null
