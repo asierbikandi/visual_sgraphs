@@ -289,3 +289,23 @@ In order to evaluate the current method with others, such as UcoSLAM, ORB-SLAM 3
        - UcoSLAM: `rosrun ucoslam_ros ucoslam_ros_video /[PATH]/vid.mp4 [PATH]/ucoslam_ros_wrapper/config/realsense_color_640_480_spot.yml -aruco-markerSize 0.78 -dict ARUCO -voc [PATH]/ucoslam_ros_wrapper/config/orb.fbow`
        - Semantic UcoSLAM: `rosrun ucoslam_ros ucoslam_ros_semantics_video /[PATH]/vid.mp4 [PATH]/ucoslam_ros_wrapper/config/realsense_color_640_480_spot.yml -aruco-markerSize 0.78 -dict ARUCO -voc [PATH]/ucoslam_ros_wrapper/config/orb.fbow`
   3. Finally, when the ground-truth (S-Graphs) and SLAM pose (e.g., UcoSLAM, etc.) are ready, you can use the [`evo_ape`](https://github.com/MichaelGrupp/evo) for evaluation, like `evo_ape tum s_graphs_pose_seq05.txt slam_pose_semuco_seq05.txt -va > results.txt --plot --plot_mode xy` -->
+
+## 🐋 Docker
+
+For a fully reproducible and environment-independent setup, check the [Docker](/docker/README.md) section.
+
+## 📚 Citation
+
+```bibtex
+@article{tourani2025vsgraphs,
+  title={vS-Graphs: Integrating Visual SLAM and Situational Graphs through Multi-level Scene Understanding},
+  author={Tourani, Ali and Ejaz, Saad and Bavle, Hriday and Morilla-Cabello, David and Sanchez-Lopez, Jose Luis and Voos, Holger},
+  journal={arXiv preprint arXiv:2503.01783},
+  year={2025}
+}
+```
+
+## 📎 Related Repositories
+
+- 🔧 [LiDAR S-Graphs](https://github.com/snt-arg/lidar_situational_graphs)
+- 🎞️ Scene Segmentor ([ROS1](https://github.com/snt-arg/scene_segment_ros))
