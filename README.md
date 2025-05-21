@@ -295,7 +295,7 @@ In order to evaluate the current method with others, such as UcoSLAM, ORB-SLAM 3
 
 ## 🐋 Docker
 
-For a fully reproducible and environment-independent setup, check the [Docker](/docker/README.md) section.
+For a fully reproducible and environment-independent setup, check the [Docker](/docker) section.
 
 ## 📚 Citation
 
