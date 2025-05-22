@@ -273,7 +273,7 @@ In order to evaluate the current method with others, such as UcoSLAM, ORB-SLAM 3
 
 For a fully reproducible and environment-independent setup, check the [Docker](/docker) section.
 
-## 📚 Citation
+<!-- ## 📚 Citation
 
 ```bibtex
 @article{tourani2025vsgraphs,
@@ -282,7 +282,7 @@ For a fully reproducible and environment-independent setup, check the [Docker](/
   journal={arXiv preprint arXiv:2503.01783},
   year={2025}
 }
-```
+``` -->
 
 ## 📎 Related Repositories
 
