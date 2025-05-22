@@ -148,14 +148,7 @@ You can read about the configuration parameters (independent of the `ROS` wrappe
 3. Run the Semantic Segmentation module (pFCN) using `roslaunch segmenter_ros segmenter_pFCN.launch`
 4. Run VoxBlox Skeleton using `roslaunch voxblox_skeleton skeletonize_map_vsgraphs.launch 2>/dev/null`
 
-| Mode            | Dataset                | Commands                                                                   | Notes                          |
-| --------------- | ---------------------- | -------------------------------------------------------------------------- | ------------------------------ |
-| Mono            | AutoSense or Live (\*) | `roslaunch orb_slam3_rosvsgraphsmono.launch [offline:=false]`              | data collected using RealSense |
-| Mono-Inertial   | AutoSense or Live (\*) | `roslaunch orb_slam3_ros vsgraphs_mono_inertial.launch [offline:=false]`   | data collected using RealSense |
-| Stereo          | AutoSense or Live (\*) | `roslaunch orb_slam3_ros vsgraphs_stereo.launch [offline:=false]`          | data collected using RealSense |
-| Stereo-Inertial | AutoSense or Live (\*) | `roslaunch orb_slam3_ros vsgraphs_stereo_inertial.launch [offline:=false]` | data collected using RealSense |
-| RGB-D           | AutoSense or Live (\*) | `roslaunch orb_slam3_ros vsgraphs_rgbd.launch [offline:=false]`            | data collected using RealSense |
-| RGB-D-Inertial  | AutoSense or Live (\*) | `roslaunch orb_slam3_ros vsgraphs_rgbd_inertial.launch [offline:=false]`   | data collected using RealSense |
+For a complete list of configurable launch arguments, see [Launch Parameters](/launch/README.md).
 
 ### ⚠️ Useful Hints <a id="hints"></a>
 
@@ -186,23 +179,6 @@ Note that given the input sensor (Mono, RGB-D, and Stereo), the parameters fed t
 - For Mono and RGB-D feed use `roslaunch aruco_ros marker_publisher.launch`,
 - For Stereo feed use `roslaunch aruco_ros marker_publisher.launch imageRaw:=/camera/infra1/image_rect_raw 
 cameraInfo:=/camera/infra1/camera_info`
-
-#### 📸 Live Version <a id="live"></a>
-
-1. For the live version, you need to add the flag `offline:=false`, such as `roslaunch orb_slam3_ros vsgraphs_mono.launch offline:=false`, which gets the **TF** values from RealSense instead of reading from `ORB-SLAM` while a `rosbag` file is being played (offline). If the flag is not set, whenever a marker is seen, the tracking will fail due to the mentioned conflict.
-2. The next step is to choose among different setups:
-
-   - For RGB-D cameras as the live feed provider, you may also require [rgbd_launch](http://wiki.ros.org/rgbd_launch) to load the nodelets to convert raw depth/RGB/IR streams to depth images. Otherwise, you may face a "resource not found" error. You can find a sample launch file for RGB-D and Mono [here](/doc/realsense2_camera_rs_rgbd.launch).
-   - For using Stereo cameras as the live feed provider, you can find a sample launch file [here](/doc/realsense2_camera_rs_stereo.launch).
-     - Note that you have to stop the **emitter** in RealSense. There are some arguments in the launch file, but changing the does not work do the job. So, the easiest solution is to run `realsense-viewer` and set `Emitter Enabled` to False.
-
-3. Run realsense use the command `roslaunch realsense2_camera [rs_rgbd/rs_stereo].launch [align_depth:=true] [unite_imu_method:=linear_interpolation]`.
-
-<!-- #### 🔖 Using IMU <a id="imu"></a>
-
-Please note that in order to use inertial sensors (i.e., _IMU_) you need to initialize it first. As you can see in the animation below, the _IMU_ needs to move steady forward and backward for around 10 seconds while facing a scene with lots of visual features. The logs appeared in the console will show if the _IMU_ is initialized or not.
-
-![IMU Initialization](demo-IMU.gif "IMU Initialization") -->
 
 ## 💾 Data Collection <a id="data"></a>
 
@@ -312,3 +288,7 @@ For a fully reproducible and environment-independent setup, check the [Docker](/
 
 - 🔧 [LiDAR S-Graphs](https://github.com/snt-arg/lidar_situational_graphs)
 - 🎞️ Scene Segmentor ([ROS1](https://github.com/snt-arg/scene_segment_ros))
+
+## 🔑 License
+
+This project is licensed under the GPL-3.0 license - see the [LICENSE](/LICENSE) for more details.
