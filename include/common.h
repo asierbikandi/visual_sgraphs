@@ -60,6 +60,9 @@
 #include "Semantic/Room.h"
 #include "Semantic/Marker.h"
 
+// Custom Messages
+#include <orb_slam3_ros/vSGraphs_AllWallsData.h>
+
 using json = nlohmann::json;
 
 class ORB_SLAM3::SystemParams;
@@ -78,6 +81,7 @@ extern std::vector<std::vector<ORB_SLAM3::Marker *>> markersBuffer;
 extern std::vector<std::vector<Eigen::Vector3d>> skeletonClusterPoints;
 
 extern ros::Publisher pubKFImage;
+extern ros::Publisher pubAllWalls;
 extern ros::Time lastPlanePublishTime;
 extern image_transport::Publisher pubTrackingImage;
 extern ros::Publisher pubCameraPose, pubCameraPoseVis, pubOdometry, pubKeyFrameMarker;
@@ -108,6 +112,14 @@ void publishSegmentedCloud(std::vector<ORB_SLAM3::KeyFrame *>, ros::Time);
 void publishKeyFrameImages(std::vector<ORB_SLAM3::KeyFrame *>, ros::Time);
 void publishKeyFrameMarkers(std::vector<ORB_SLAM3::KeyFrame *>, ros::Time);
 void publishBodyOdometry(Sophus::SE3f, Eigen::Vector3f, Eigen::Vector3f, ros::Time);
+
+/**
+ * @brief Publishes all mapped walls to detect possible rooms.
+ *
+ * @param walls The vector of mapped walls to be published.
+ * @param time The timestamp for the message.
+ */
+void publishAllMappedWalls(std::vector<ORB_SLAM3::Plane *>, ros::Time);
 
 void clearKFClsClouds(std::vector<ORB_SLAM3::KeyFrame *>);
 

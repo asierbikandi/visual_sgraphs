@@ -2,9 +2,8 @@
 <package>
   <name>orb_slam3_ros</name>
   <version>0.0.1</version>
-  <description>ORB SLAM3 ROS implementation.</description>
-
-  <maintainer email="thienhoangnguyen94@gmail.com">Thien Nguyen</maintainer>
+  <description>Visual S-Graphs (vS-Graphs) ROS-based Implementation.</description>
+  <maintainer email="a.tourani1991@gmail.com">Ali Tourani</maintainer>
 
   <license>BSD</license>
 
