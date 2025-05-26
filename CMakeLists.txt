@@ -73,6 +73,12 @@ add_service_files(
   SaveMap.srv
 )
 
+# Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  vSGraphs_AllWallsData.msg
+)
+
 generate_messages(
   DEPENDENCIES
   std_msgs
