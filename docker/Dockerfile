@@ -57,25 +57,13 @@ ENV FORCE_CUDA="1"
 RUN pip3 install 'git+https://github.com/facebookresearch/detectron2.git'
 RUN pip3 install 'git+https://github.com/openai/CLIP.git'
  
-# other libraries
-ADD requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
- 
 ##### SSH keys for GitHub #####
-# ssh keys as build arguments
-ARG ssh_prv_key
-ARG ssh_pub_key
  
-RUN mkdir -p -m 0700 /root/.ssh && \
-    ssh-keyscan -H github.com >> /root/.ssh/known_hosts
+# Define the SSH keys as build arguments for latter mounting
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
  
-RUN echo "$ssh_prv_key" > /root/.ssh/id_rsa && \
-    echo "$ssh_pub_key" > /root/.ssh/id_rsa.pub && \
-    chmod 600 /root/.ssh/id_rsa && \
-    chmod 600 /root/.ssh/id_rsa.pub
-    
 ##### Clone repositories #####
-# install pangolin
+# Pangolin
 RUN apt-get install libepoxy-dev -y
 WORKDIR /opt/
 RUN git clone --branch v0.8 --depth 1 https://github.com/stevenlovegrove/Pangolin.git && \
@@ -85,7 +73,7 @@ RUN git clone --branch v0.8 --depth 1 https://github.com/stevenlovegrove/Pangoli
     make -j && \
     make install
  
-# install Cmake
+# Cmake
 ARG version=3.22
 ARG build=1
 WORKDIR /tmp
@@ -96,18 +84,25 @@ RUN ./bootstrap
 RUN make -j8
 RUN make install
  
-# for ROS packages: visual sgraphs, semantic segmenter, aruco ros
+# ROS packages: visual sgraphs, semantic segmenter, aruco ros
 RUN mkdir -p /workspace/src
 WORKDIR /workspace/src/
-RUN git clone git@github.com:snt-arg/visual_sgraphs.git
-RUN git clone git@github.com:snt-arg/scene_segment_ros.git
-RUN git clone -b noetic-devel git@github.com:pal-robotics/aruco_ros.git
+ 
+# Mount the SSH keys for cloning private repositories
+RUN --mount=type=ssh git clone git@github.com:snt-arg/visual_sgraphs.git
+RUN --mount=type=ssh git clone git@github.com:snt-arg/scene_segment_ros.git
+RUN --mount=type=ssh git clone -b noetic-devel git@github.com:pal-robotics/aruco_ros.git
+
+# other libraries
+WORKDIR /workspace/src/visual_sgraphs/docker
+RUN pip3 install -r requirements.txt
+WORKDIR /workspace/src/
  
 # for ROS package: mav_voxblox_planning
-RUN git clone git@github.com:snt-arg/mav_voxblox_planning.git
-RUN wstool init . ./mav_voxblox_planning/install/install_ssh.rosinstall
-RUN wstool update
-
+RUN --mount=type=ssh git clone git@github.com:snt-arg/mav_voxblox_planning.git
+RUN --mount=type=ssh wstool init . ./mav_voxblox_planning/install/install_ssh.rosinstall
+RUN --mount=type=ssh wstool update
+ 
 # download the yoso checkpoint
 RUN wget https://github.com/hujiecpp/YOSO/releases/download/v0.1/yoso_res50_coco.pth
 RUN mv yoso_res50_coco.pth /workspace/src/scene_segment_ros/include/
@@ -135,8 +130,9 @@ RUN echo "#!/bin/bash" >> /entrypoint.sh \
     && echo "echo \"source /workspace/devel/setup.bash\" >> ~/.bashrc" >> /entrypoint.sh \
     && echo 'exec "$@"' >> /entrypoint.sh \
     && chmod a+x /entrypoint.sh
-
+ 
 WORKDIR /workspace/
  
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
+ 

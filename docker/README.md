@@ -18,7 +18,7 @@ curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/nvidia-con
 sudo apt update
 sudo apt install -y nvidia-container-toolkit
 
-# Configure the Docker runtime
+# Configure the Docker runtime (inside docker folder)
 sudo nvidia-ctk runtime configure --runtime=docker
 
 # Restart Docker
@@ -30,13 +30,8 @@ sudo systemctl restart docker
 To build the Docker image, run the following command within this directory:
 
 ```bash
-docker build \
-  --build-arg ssh_prv_key="$(cat ~/.ssh/id_rsa)" \
-  --build-arg ssh_pub_key="$(cat ~/.ssh/id_rsa.pub)" \
-  -t vsgraphs .
+docker build --ssh default -t vsgraphs .
 ```
-
---build-arg ssh_pub_key="$(cat ~/.ssh/id_ed25519.pub)" -t vsgraphs .
 
 > 🛎️ Tip: Please note that your Github authentication keys might be named differently depending on the encryption algorithm. If above does not work, try replacing `id_rsa` with `id_ed25519`, in the above command.
 
@@ -52,6 +47,9 @@ docker run -it -d --privileged --name vsgraphs -e DISPLAY=$DISPLAY -e XAUTHORITY
 
 # [Option II] using Docker Compose
 docker compose up -d
+
+# [Option II] using devcontainers
+# in `VSCode`, select "Reopen in Container"
 ```
 
 > 🛎️ Tip: If you use **Docker Compose**, do not forget to set `"[dataset/path]:/root/datasets"` to the path in which your `rosbags` exist.
