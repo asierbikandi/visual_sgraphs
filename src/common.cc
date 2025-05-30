@@ -18,9 +18,9 @@ std::shared_ptr<tf::TransformListener> transformListener;
 std::vector<std::vector<ORB_SLAM3::Marker *>> markersBuffer;
 std::vector<std::vector<Eigen::Vector3d>> skeletonClusterPoints;
 std::string world_frame_id, cam_frame_id, imu_frame_id, frameMap, frameBC, frameSE;
+ros::Publisher pubAllWalls, pubAllMappoints, pubFiducialMarker, pubRoom, pubFreespaceCluster;
+ros::Publisher pubTrackedMappoints, pubSegmentedPointcloud, pubPlanePointcloud, pubPlaneLabel, pubDoor;
 ros::Publisher pubCameraPose, pubCameraPoseVis, pubOdometry, pubKeyFrameMarker, pubKFImage, pubKeyFrameList;
-ros::Publisher pubTrackedMappoints, pubSegmentedPointcloud, pubPlanePointcloud, pubPlaneLabel, pubDoor,
-    pubAllMappoints, pubFiducialMarker, pubRoom, pubFreespaceCluster;
 ros::Time lastPlanePublishTime = ros::Time(0);
 
 bool saveMapService(orb_slam3_ros::SaveMap::Request &req, orb_slam3_ros::SaveMap::Response &res)
@@ -101,6 +101,8 @@ void setupPublishers(ros::NodeHandle &nodeHandler, image_transport::ImageTranspo
     pubPlanePointcloud = nodeHandler.advertise<sensor_msgs::PointCloud2>(node_name + "/plane_point_clouds", 1);
     pubFiducialMarker = nodeHandler.advertise<visualization_msgs::MarkerArray>(node_name + "/fiducial_markers", 1);
     pubSegmentedPointcloud = nodeHandler.advertise<sensor_msgs::PointCloud2>(node_name + "/segmented_point_clouds", 1);
+    // [Building Components] Publishing Walls for GNN-based Room Detection
+    pubAllWalls = nodeHandler.advertise<orb_slam3_ros::vSGraphs_AllWallsData>(node_name + "/all_mapped_walls", 10);
 
     // Structural Elements
     pubRoom = nodeHandler.advertise<visualization_msgs::MarkerArray>(node_name + "/rooms", 1);
@@ -147,6 +149,9 @@ void publishTopics(ros::Time msgTime, Eigen::Vector3f Wbb)
     publishTrackingImage(pSLAM->GetCurrentFrame(), msgTime);
     publishKeyFrameImages(keyframes, msgTime);
     publishKeyFrameMarkers(keyframes, msgTime);
+    
+    // Publish all mapped walls for GNN-based room detection
+    publishAllMappedWalls(pSLAM->GetAllPlanes(), msgTime);
 
     // Publish pointclouds
     if (pubPointClouds)
@@ -365,6 +370,51 @@ void publishKeyFrameImages(std::vector<ORB_SLAM3::KeyFrame *> keyframe_vec, ros:
         pubKFImage.publish(vsGraphPublisher);
         keyframe->isPublished = true;
     }
+}
+
+void publishAllMappedWalls(std::vector<ORB_SLAM3::Plane *> walls, ros::Time msgTime)
+{
+    orb_slam3_ros::vSGraphs_AllWallsData wallDataMsg;
+
+    // Fill the data message with wall information
+    wallDataMsg.header.stamp = msgTime;
+    wallDataMsg.header.frame_id = world_frame_id;
+
+    // Fill in the walls data
+    for (const auto &wall : walls)
+    {
+        if (!wall || wall->getPlaneType() != ORB_SLAM3::Plane::planeVariant::WALL)
+            continue;
+        
+        // Calculate the length of the wall
+        float length = 0.0f;
+        pcl::PointCloud<pcl::PointXYZRGBA>::Ptr wallCloud = wall->getMapClouds();
+        if (wallCloud && wallCloud->points.size() > 1)
+        {
+            // Calculate the length of the wall by finding the distance between the first and last points
+            Eigen::Vector3f startPoint(wallCloud->points.front().x, wallCloud->points.front().y, wallCloud->points.front().z);
+            Eigen::Vector3f endPoint(wallCloud->points.back().x, wallCloud->points.back().y, wallCloud->points.back().z);
+            length = (endPoint - startPoint).norm();
+        }
+
+        // Fill the wall data
+        orb_slam3_ros::vSGraphs_WallData wallData;
+
+        wallData.length = length;
+        wallData.id = wall->getId();
+        wallData.centroid.x = wall->getCentroid().x();
+        wallData.centroid.y = wall->getCentroid().y();
+        wallData.centroid.z = wall->getCentroid().z();
+        wallData.normal.x = wall->getGlobalEquation().normal().x();
+        wallData.normal.y = wall->getGlobalEquation().normal().y();
+        wallData.normal.z = wall->getGlobalEquation().normal().z();
+
+        // Add the wall to the message
+        wallDataMsg.walls.push_back(wallData);
+    }
+
+    // Publish all mapped walls
+    pubAllWalls.publish(wallDataMsg);
 }
 
 void clearKFClsClouds(std::vector<ORB_SLAM3::KeyFrame *> keyframe_vec)
