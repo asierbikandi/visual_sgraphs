@@ -76,16 +76,20 @@ add_service_files(
 # Generate messages in the 'msg' folder
 add_message_files(
   FILES
+  vSGraphs_WallData.msg
+  vSGraphs_RoomData.msg
   vSGraphs_AllWallsData.msg
+  vSGraphs_AllDetectdetRooms.msg
 )
 
 generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 catkin_package (
-  CATKIN_DEPENDS roscpp rospy std_msgs cv_bridge image_transport tf sensor_msgs dynamic_reconfigure message_runtime backward_ros rviz_visual_tools
+  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs cv_bridge image_transport tf sensor_msgs dynamic_reconfigure message_runtime backward_ros rviz_visual_tools
   LIBRARIES {PROJECT_NAME} libDBoW2
 )
 
