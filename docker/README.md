@@ -60,7 +60,7 @@ docker compose up -d
 docker exec -it vsgraphs bash
 
 # Inside the container
-source /opt/ros/noetic/setup.bash && source devel/setup.bash && roslaunch orb_slam3_ros vs_graphs.launch
+roslaunch orb_slam3_ros vs_graphs.launch
 ```
 
 You can use any other launch files instead of `vs_graphs.launch`.

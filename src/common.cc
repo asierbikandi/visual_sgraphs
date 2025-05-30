@@ -375,8 +375,43 @@ void publishKeyFrameImages(std::vector<ORB_SLAM3::KeyFrame *> keyframe_vec, ros:
 void publishAllMappedWalls(std::vector<ORB_SLAM3::Plane *> walls, ros::Time msgTime)
 {
     orb_slam3_ros::vSGraphs_AllWallsData wallDataMsg;
+
+    // Fill the data message with wall information
     wallDataMsg.header.stamp = msgTime;
     wallDataMsg.header.frame_id = world_frame_id;
+
+    // Fill in the walls data
+    for (const auto &wall : walls)
+    {
+        if (!wall || wall->getPlaneType() != ORB_SLAM3::Plane::planeVariant::WALL)
+            continue;
+        
+        // Calculate the length of the wall
+        float length = 0.0f;
+        pcl::PointCloud<pcl::PointXYZRGBA>::Ptr wallCloud = wall->getMapClouds();
+        if (wallCloud && wallCloud->points.size() > 1)
+        {
+            // Calculate the length of the wall by finding the distance between the first and last points
+            Eigen::Vector3f startPoint(wallCloud->points.front().x, wallCloud->points.front().y, wallCloud->points.front().z);
+            Eigen::Vector3f endPoint(wallCloud->points.back().x, wallCloud->points.back().y, wallCloud->points.back().z);
+            length = (endPoint - startPoint).norm();
+        }
+
+        // Fill the wall data
+        orb_slam3_ros::vSGraphs_WallData wallData;
+
+        wallData.length = length;
+        wallData.id = wall->getId();
+        wallData.centroid.x = wall->getCentroid().x();
+        wallData.centroid.y = wall->getCentroid().y();
+        wallData.centroid.z = wall->getCentroid().z();
+        wallData.normal.x = wall->getGlobalEquation().normal().x();
+        wallData.normal.y = wall->getGlobalEquation().normal().y();
+        wallData.normal.z = wall->getGlobalEquation().normal().z();
+
+        // Add the wall to the message
+        wallDataMsg.walls.push_back(wallData);
+    }
 
     // Publish all mapped walls
     pubAllWalls.publish(wallDataMsg);
