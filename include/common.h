@@ -62,6 +62,7 @@
 
 // Custom Messages
 #include <orb_slam3_ros/vSGraphs_AllWallsData.h>
+#include <orb_slam3_ros/vSGraphs_AllDetectdetRooms.h>
 
 using json = nlohmann::json;
 
