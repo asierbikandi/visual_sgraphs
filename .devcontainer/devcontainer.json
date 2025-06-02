@@ -7,13 +7,15 @@
       "extensions": [
         "ms-python.python",
         "charliermarsh.ruff",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-themes",
         "ms-vscode.cpptools-extension-pack",
         "ms-iot.vscode-ros",
-        "smilerobotics.urdf",
-        "redhat.vscode-xml",
-        "tamasfe.even-better-toml",
-        "timonwong.shellcheck",
-        "yzhang.markdown-all-in-one"
+        "ms-vscode.cmake-tools",
+        "esbenp.prettier-vscode",
+        "GitHub.copilot",
+        "eamodio.gitlens",
+        "PKief.material-icon-theme"
       ],
       "settings": {
         "files.associations": {
