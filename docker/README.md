@@ -30,7 +30,7 @@ sudo systemctl restart docker
 To build the Docker image, run the following command within this directory:
 
 ```bash
-docker build --ssh default -t vsgraphs .
+docker build --ssh default -t vsgraphs -f Noetic.Dockerfile .
 ```
 
 > 🛎️ Tip: Please note that your Github authentication keys might be named differently depending on the encryption algorithm. If above does not work, try replacing `id_rsa` with `id_ed25519`, in the above command.
@@ -48,11 +48,11 @@ docker run -it -d --privileged --name vsgraphs -e DISPLAY=$DISPLAY -e XAUTHORITY
 # [Option II] using Docker Compose
 docker compose up -d
 
-# [Option II] using devcontainers
+# [Option III] using devcontainers
 # in `VSCode`, select "Reopen in Container"
 ```
 
-> 🛎️ Tip: If you use **Docker Compose**, do not forget to set `"[dataset/path]:/root/datasets"` to the path in which your `rosbags` exist.
+> 🛎️ Tip: If you use **Docker Compose**, make sure to properly configure `Working Directories` (maps your project folder from the host to the container to ensure code and configuration changes persist) and `Data Directories` (mount the folder containing your datasets (e.g., ROS bags) so they are accessible and runnable inside the container).
 
 ### III-B. Run the Container
 
@@ -62,5 +62,3 @@ docker exec -it vsgraphs bash
 # Inside the container
 roslaunch orb_slam3_ros vs_graphs.launch
 ```
-
-You can use any other launch files instead of `vs_graphs.launch`.

@@ -1,6 +1,14 @@
 FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
 ARG DEBIAN_FRONTEND=noninteractive
- 
+
+# User and group setup
+ARG USERNAME=user
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# Deletes user if already in container
+RUN if id -u $USER_UID ; then userdel `id -un $USER_UID` ; fi
+
 ##### Environment variables #####
 ENV CUDA_HOME=/usr/local/cuda
  
@@ -43,6 +51,11 @@ RUN apt-get install -y \
 # ROS dependencies
 RUN rosdep init
 RUN rosdep update
+
+# Create new user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
  
 ##### Python environment setup #####
 # PyTorch and related libraries - networkx needs to be installed first because of version issue
@@ -134,5 +147,7 @@ RUN echo "#!/bin/bash" >> /entrypoint.sh \
 WORKDIR /workspace/
  
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["bash"]
- 
+
+USER $USERNAME
+CMD ["/bin/bash"]
+SHELL ["/bin/bash"]
