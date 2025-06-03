@@ -23,7 +23,7 @@
         <!-- Files -->
         <param name="voc_file" type="string" value="$(find orb_slam3_ros)/orb_slam3/Vocabulary/ORBvoc.txt.bin"/>
         <param name="settings_file" type="string" value="$(find orb_slam3_ros)/config/RGB-D/$(arg sensor_config).yaml"/>
-        <param name="sys_params_file" type="string" value="$(find orb_slam3_ros)/config/common_system_params.yaml"/>
+        <param name="sys_params_file" type="string" value="$(find orb_slam3_ros)/config/system_params.yaml"/>
         <!-- Environment -->
         <param name="static_transform" value="true" />
         <param name="roll" type="double" value="0.0" />

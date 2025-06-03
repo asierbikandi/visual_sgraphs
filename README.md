@@ -4,8 +4,7 @@
 
 <!-- Badges -->
 
-<!-- [![arXiv](https://img.shields.io/badge/arXiv-2309.10461-b31b1b.svg)](https://arxiv.org/abs/2309.10461) -->
-
+[![arXiv](https://img.shields.io/badge/arXiv-2309.10461-b31b1b.svg)](https://arxiv.org/abs/2309.10461)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 **vS-Graphs** is inspired by [LiDAR S-Graphs](https://github.com/snt-arg/lidar_situational_graphs) and extends [ORB-SLAM 3.0](https://github.com/UZ-SLAMLab/ORB_SLAM3) by integrating **optimizable 3D scene graphs**, enhancing mapping and localization accuracy through scene understanding. It improves scene representation with building components (_i.e.,_ wall and ground surfaces) and infering structural elements (_i.e.,_ rooms and corridors), making SLAM more robust and efficient.
@@ -140,7 +139,7 @@ You can find the configuration files for the application in the `config` folder.
 
 ### ⚙️ Common System Parameters
 
-You can read about the configuration parameters (independent of the `ROS` wrapper) for performing SLAM [here](/config/README.md). They can be find and modified in [common_system_params.yaml](/config/common_system_params.yaml).
+You can read about the configuration parameters (independent of the `ROS` wrapper) for performing SLAM [here](/config/README.md). They can be find and modified in [system_params.yaml](/config/system_params.yaml).
 
 ## 🚀 Run Examples <a id="run"></a>
 
@@ -249,10 +248,10 @@ The map file will have `.osa` extension, and is located in the `ROS_HOME` folder
 rosservice call /orb_slam3/save_map [file_name]
 ```
 
-<!-- ### Services <a id="maps-services"></a>
+### Services <a id="maps-services"></a>
 
 - `rosservice call /orb_slam3/save_map [file_name]`: save the map as `[file_name].osa` in `ROS_HOME` folder.
-- `rosservice call /orb_slam3/save_traj [file_name]`: save the estimated trajectory of camera and keyframes as `[file_name]_cam_traj.txt` and `[file_name]_kf_traj.txt` in `ROS_HOME` folder. -->
+- `rosservice call /orb_slam3/save_traj [file_name]`: save the estimated trajectory of camera and keyframes as `[file_name]_cam_traj.txt` and `[file_name]_kf_traj.txt` in `ROS_HOME` folder.
 
 <!-- ## 📊 Evaluation <a id="eval"></a>
 
@@ -274,7 +273,7 @@ In order to evaluate the current method with others, such as UcoSLAM, ORB-SLAM 3
 
 For a fully reproducible and environment-independent setup, check the [Docker](/docker) section.
 
-<!-- ## 📚 Citation
+## 📚 Citation
 
 ```bibtex
 @article{tourani2025vsgraphs,
@@ -283,7 +282,7 @@ For a fully reproducible and environment-independent setup, check the [Docker](/
   journal={arXiv preprint arXiv:2503.01783},
   year={2025}
 }
-``` -->
+```
 
 ## 📎 Related Repositories
 
