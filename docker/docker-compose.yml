@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Noetic.Dockerfile
+      ssh:
+        - default
       args:
         USERNAME: $USERNAME
         USER_UID: 1000

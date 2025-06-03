@@ -32,6 +32,7 @@ public:
     void GrabArUcoMarker(const aruco_msgs::MarkerArray &msg);
     void GrabSegmentation(const segmenter_ros::SegmenterDataMsg &msgSegImage);
     void GrabVoxbloxSkeletonGraph(const visualization_msgs::MarkerArray &msgSkeletonGraph);
+    void GrabGNNRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms);
     void GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sensor_msgs::ImageConstPtr &msgD,
                   const sensor_msgs::PointCloud2ConstPtr &msgPC);
 };
@@ -114,6 +115,10 @@ int main(int argc, char **argv)
     // Subscriber to get the mesh from voxblox
     ros::Subscriber subVoxbloxSkeletonMesh = nodeHandler.subscribe("/voxblox_skeletonizer/sparse_graph", 1,
                                                                    &ImageGrabber::GrabVoxbloxSkeletonGraph, &igb);
+    
+    // Subscriber to get the room candidates detected by the GNN module
+    ros::Subscriber subGNNRooms = nodeHandler.subscribe("/gnn_room_detector", 1,
+                                                        &ImageGrabber::GrabGNNRoomCandidates, &igb);
 
     setupPublishers(nodeHandler, imgTransport, nodeName);
     setupServices(nodeHandler, nodeName);
@@ -224,4 +229,15 @@ void ImageGrabber::GrabVoxbloxSkeletonGraph(const visualization_msgs::MarkerArra
 {
     // Pass the skeleton graph to a buffer to be processed by the SemanticSegmentation thread
     setVoxbloxSkeletonCluster(msgSkeletonGraphs);
+}
+
+/**
+ * @brief Callback function to get the room candidates detected by the GNN module
+ *
+ * @param msgGNNRooms The room candidates detected by the GNN module
+ */
+void ImageGrabber::GrabGNNRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms)
+{
+    // Set the GNN room candidates in the SLAM system
+    setGNNBasedRoomCandidates(msgGNNRooms);
 }

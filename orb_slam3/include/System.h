@@ -281,6 +281,11 @@ namespace ORB_SLAM3
          */
         void setSkeletonCluster(const std::vector<std::vector<Eigen::Vector3d>> &skeletonClusterPoints);
 
+        /**
+         * @brief Update the GNN room candidates list
+         */
+        void setGNNRoomCandidates(const std::vector<ORB_SLAM3::Room *> &gnnRoomCandidates);
+
 #ifdef REGISTER_TIMES
         void InsertRectTime(double &time);
         void InsertResizeTime(double &time);

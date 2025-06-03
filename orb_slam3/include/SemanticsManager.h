@@ -52,6 +52,11 @@ namespace ORB_SLAM3
         std::vector<std::vector<Eigen::Vector3d>> getLatestSkeletonCluster();
 
         /**
+         * @brief Gets the latest detected room candidates from GNN-based room detection
+         */
+        std::vector<ORB_SLAM3::Room *> getLatestGNNRoomCandidates();
+
+        /**
          * @brief Filters the wall planes to remove heavily tilted walls
          */
         void filterWallPlanes();
@@ -102,17 +107,18 @@ namespace ORB_SLAM3
 
         /**
          * @brief Converts mapped room candidates to rooms using geometric constraints
-         * 🚧 [vS-Graphs v.2.0] This solution is not very reliable. It is recommended to use Voxblox version.
+         * 🚧 [vS-Graphs v.1.2.0] This solution is not very reliable. It is recommended to use other
+         * structural element recognition solutions.
          */
         void updateMapRoomCandidateToRoomGeo(KeyFrame *pKF);
 
         /**
-         * @brief Converts mapped room candidates to rooms using voxmap and freespace clusters
+         * @brief Uses the Skeleton Voxblox to detect room candidates
          */
         void detectMapRoomCandidateVoxblox();
 
         /**
-         * @brief Converts mapped room candidates to rooms using a GNN
+         * @brief Gets the rooms detected by the GNN module
          */
         void detectMapRoomCandidateGNN();
 

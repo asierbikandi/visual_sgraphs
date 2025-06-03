@@ -31,6 +31,7 @@ bool colorPointcloud = true;
 double roll = 0, pitch = 0, yaw = 0;
 bool pubStaticTransform, pubPointClouds;
 image_transport::Publisher pubTrackingImage;
+std::vector<ORB_SLAM3::Room *> gnnRoomCandidates;
 rviz_visual_tools::RvizVisualToolsPtr visualTools;
 std::shared_ptr<tf::TransformListener> transformListener;
 std::vector<std::vector<ORB_SLAM3::Marker *>> markersBuffer;
@@ -1313,4 +1314,33 @@ void setVoxbloxSkeletonCluster(const visualization_msgs::MarkerArray &skeletonAr
 
     // Set the cluster points to the active map
     pSLAM->setSkeletonCluster(skeletonClusterPoints);
+}
+
+void setGNNBasedRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms) {
+    // Reset the buffer
+    gnnRoomCandidates.clear();
+
+    // Loop through the received GNN rooms
+    for (const auto &room : msgGNNRooms.rooms)
+    {
+        // Create a new room object
+        ORB_SLAM3::Room *newRoom = new ORB_SLAM3::Room();
+
+        // Set the room properties
+        newRoom->setId(room.id);
+        newRoom->setHasKnownLabel(false);
+
+        // Check if corridor (if the length of room.wallIds is 2)
+        bool isCorridor = (room.wallIds.size() == 2);
+        newRoom->setIsCorridor(isCorridor);
+
+        // [TODO] use room.wallIds to fill newRoom->setWalls
+        // [TODO] use room.centroid to fill newRoom->setRoomCenter
+
+        // Add the room to the GNN candidates buffer
+        gnnRoomCandidates.push_back(newRoom);
+    }
+
+    // [TODO] Define a 'setGNNRoomCandidates' in System.h
+    pSLAM->setGNNRoomCandidates(gnnRoomCandidates);
 }

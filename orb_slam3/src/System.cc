@@ -288,6 +288,11 @@ namespace ORB_SLAM3
         mpAtlas->SetSkeletonClusterPoints(skeletonClusterPoints);
     }
 
+    void System::setGNNRoomCandidates(const std::vector<ORB_SLAM3::Room *> &gnnRoomCandidates)
+    {
+        // [TODO] Add the GNN room candidates to the SemanticsManager
+    }
+
     Sophus::SE3f System::TrackStereo(const cv::Mat &imLeft, const cv::Mat &imRight, const double &timestamp,
                                      const vector<IMU::Point> &vImuMeas, string filename, const std::vector<Marker *> markers)
     {

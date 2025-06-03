@@ -103,6 +103,9 @@ extern std::vector<std::vector<ORB_SLAM3::Marker *>> markersBuffer;
 // List of white space cluster points obtained from `voxblox_skeleton`
 extern std::vector<std::vector<Eigen::Vector3d>> skeletonClusterPoints;
 
+// List of GNN-based room candidates
+extern std::vector<ORB_SLAM3::Room *> gnnRoomCandidates;
+
 extern ros::Publisher pubKFImage;
 extern ros::Publisher pubAllWalls;
 extern ros::Time lastPlanePublishTime;
@@ -207,3 +210,9 @@ std::pair<double, std::vector<ORB_SLAM3::Marker *>> findNearestMarker(double fra
  * @param skeletonArray The array of skeleton voxels received
  */
 void setVoxbloxSkeletonCluster(const visualization_msgs::MarkerArray &skeletonArray);
+
+/**
+ * @brief Gets the set of room candidates detected by the GNN-based room detection module
+ * @param msgGNNRooms The message containing the detected room candidates
+ */
+void setGNNBasedRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms);

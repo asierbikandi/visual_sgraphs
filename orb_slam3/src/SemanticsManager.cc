@@ -54,6 +54,8 @@ namespace ORB_SLAM3
             // updateMapRoomCandidateToRoomGeo(thisKF);
             if (sysParams->room_seg.method == SystemParams::room_seg::Method::FREE_SPACE)
                 detectMapRoomCandidateVoxblox();
+            else if (sysParams->room_seg.method == SystemParams::room_seg::Method::GNN)
+                detectMapRoomCandidateGNN();
 
             // // count non-bad map points
             // int numMapPoints = 0;
@@ -75,6 +77,11 @@ namespace ORB_SLAM3
         unique_lock<std::mutex> lock(mMutexNewRooms);
         // Get the latest skeleton cluster from Atlas
         return mpAtlas->GetSkeletoClusterPoints();
+    }
+
+    std::vector<ORB_SLAM3::Room *> SemanticsManager::getLatestGNNRoomCandidates()
+    {
+        // [TODO]
     }
 
     void SemanticsManager::filterWallPlanes()
