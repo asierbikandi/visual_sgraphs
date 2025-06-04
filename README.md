@@ -4,7 +4,7 @@
 
 <!-- Badges -->
 
-[![arXiv](https://img.shields.io/badge/arXiv-2309.10461-b31b1b.svg)](https://arxiv.org/abs/2309.10461)
+[![arXiv](https://img.shields.io/badge/arXiv-2309.10461-b31b1b.svg)](https://arxiv.org/abs/2503.01783)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 **vS-Graphs** is inspired by [LiDAR S-Graphs](https://github.com/snt-arg/lidar_situational_graphs) and extends [ORB-SLAM 3.0](https://github.com/UZ-SLAMLab/ORB_SLAM3) by integrating **optimizable 3D scene graphs**, enhancing mapping and localization accuracy through scene understanding. It improves scene representation with building components (_i.e.,_ wall and ground surfaces) and infering structural elements (_i.e.,_ rooms and corridors), making SLAM more robust and efficient.
@@ -280,7 +280,8 @@ For a fully reproducible and environment-independent setup, check the [Docker](/
   title={vS-Graphs: Integrating Visual SLAM and Situational Graphs through Multi-level Scene Understanding},
   author={Tourani, Ali and Ejaz, Saad and Bavle, Hriday and Morilla-Cabello, David and Sanchez-Lopez, Jose Luis and Voos, Holger},
   journal={arXiv preprint arXiv:2503.01783},
-  year={2025}
+  year={2025},
+  doi={https://doi.org/10.48550/arXiv.2503.01783}
 }
 ```
 

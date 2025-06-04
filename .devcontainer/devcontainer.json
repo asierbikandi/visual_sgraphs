@@ -1,6 +1,6 @@
 {
   "name": "vsgraphs_ros1",
-  "remoteUser": "root",
+  "remoteUser": "${env.USERNAME}",
   "service": "vsgraphs",
   "customizations": {
     "vscode": {
