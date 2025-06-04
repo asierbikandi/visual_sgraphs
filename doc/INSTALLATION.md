@@ -1,54 +1,62 @@
 # 🚀 Install vS-Graphs
 
-## 📝 Prerequisites <a id="prerequisites"></a>
+## 📝 I. Prerequisites
 
-### OpenCV <a id="opencv"></a>
+### Install OpenCV
 
-Check the OpenCV version on your computer (required [at least 3.0](https://github.com/UZ-SLAMLab/VS_GRAPHS)):
+vS-Graphs requires **OpenCV v4.2+** for computer vision tasks, which can be installed via the [installation instructions](https://docs.opencv.org/4.x/d0/d3d/tutorial_general_install.html) page. For Ubuntu 24.04, install it using below commands.
 
+```bash
+sudo apt update
+sudo apt install libopencv-dev -y
+
+# Check the version
+dpkg -l libopencv-dev
 ```
-python3 -c "import cv2; print(cv2.__version__)"
-```
 
-On a freshly installed Ubuntu 20.04.4 LTS with desktop image, OpenCV 4.2.0 is already included. If a newer version is required (>= 3.0), follow [installation instruction](https://docs.opencv.org/4.x/d0/d3d/tutorial_general_install.html) and change the corresponding OpenCV version in `CMakeLists.txt`
+### Install Eigen3
 
-### Eigen3 <a id="eigen"></a>
+vS-Graphs relies on **Eigen3**, a C++ template library for linear algebra (matrices, vectors, solvers, etc.). You can install it via APT:
 
-Install `Eigen`, which is a C++ template library for linear algebra (including matrices, vectors, and numerical solvers):
-
-```
+```bash
 sudo apt install libeigen3-dev
 ```
 
-### Pangolin <a id="pangolin"></a>
+> 🛎️ Tip: `libeigen3-dev` is a header-only library and no linking is required, as `CMake` will automatically find it.
 
-Install `Pangolin`, which is a set of lightweight and portable utility libraries for prototyping 3D, numeric or video based programs and algorithms:
+### Install Pangolin
 
-```
-cd ~
-git clone https://github.com/stevenlovegrove/Pangolin.git
+[Pangolin](https://github.com/stevenlovegrove/Pangolin) is a lightweight and portable library used for visualizing 3D data, camera views, and prototyping video-based programs. vS-Graphs has been tested with **Pangolin v0.8**.
+
+```bash
+# Clone
+git clone --branch v0.8 --depth 1 https://github.com/stevenlovegrove/Pangolin.git
+
+# Install using CMake
 cd Pangolin
 mkdir build && cd build
 cmake ..
-make
+make -j
 sudo make install
 ```
 
-### 🎞️ RealSense (Live Mode - optional) <a id="realsense"></a>
-
-Please refer to [this page](/doc/RealSense/README.md) for detailed description on how to prepare a RealSense D400 series camera for live feed or data collection.
-
-### 🎨 Kimera-Semantics (optional) <a id="kimera"></a>
-
-Install `Kimera-Semantics` based on the installation guide introduced [here](https://github.com/MIT-SPARK/Kimera-Semantics/tree/master). In case you have `Ros Noetic`, you may face some errors related to `pcl` library and the build fails. In this case, you should apply `catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14` to be able to build it ([issue](https://github.com/MIT-SPARK/Kimera-Semantics/issues/67)).
-
-### `hector-trajectory-server` (optional)
+### Install `hector-trajectory-server` (Optional)
 
 Using this library you can visualize the real-time trajectory of `camera/IMU`.
+[`hector-trajectory-server`](http://wiki.ros.org/hector_trajectory_server) is a ROS package that enables real-time trajectory visualization of a camera or IMU. It is useful for monitoring SLAM progress during runtime. You can install it via the below command:
 
-```
+```bash
+# Check the ROS-DISTRO
 sudo apt install ros-[DISTRO]-hector-trajectory-server
 ```
+
+### Install RealSense Library (Optional)
+
+To use an Intel RealSense camera for **live mode** or **data collection**, you will need to install the necessary drivers and libraries. Please follow the detailed setup guide available in [RealSense Setup Instructions](/doc/RealSense/README.md) page. This includes steps for:
+
+- Installing `librealsense`
+- Verifying camera connection
+- Enabling live streaming or data recording
 
 ## ⚙️ Installation <a id="installation"></a>
 
