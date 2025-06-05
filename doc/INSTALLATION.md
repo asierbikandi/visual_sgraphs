@@ -1,6 +1,6 @@
 # 🚀 Install vS-Graphs
 
-## 📝 I. Prerequisites
+## 📝 I. Package Installation
 
 ### Install OpenCV
 
@@ -40,13 +40,24 @@ make -j
 sudo make install
 ```
 
-### Install `hector-trajectory-server` (Optional)
+### Install Required ROS Libraries
 
-Using this library you can visualize the real-time trajectory of `camera/IMU`.
-[`hector-trajectory-server`](http://wiki.ros.org/hector_trajectory_server) is a ROS package that enables real-time trajectory visualization of a camera or IMU. It is useful for monitoring SLAM progress during runtime. You can install it via the below command:
+Ensure that all necessary `ROS` dependencies are installed:
 
 ```bash
-# Check the ROS-DISTRO
+# Installs `ros-noetic-backward-ros` & `ros-noetic-rviz-visual-tools`
+rosdep install --from-paths src --ignore-src -y
+```
+
+> 🛎️ Note: The current version of vS-Graphs supports **ROS Noetic** and is primarily tested on Ubuntu 20.04.
+
+### Install `hector-trajectory-server` (Optional)
+
+Using this library you can visualize the real-time trajectory of camera of IMU.
+[`Hector-trajectory-server`](http://wiki.ros.org/hector_trajectory_server) is a ROS package that enables real-time trajectory visualization of a camera or IMU. It is useful for monitoring SLAM progress during runtime. You can install it via the below command:
+
+```bash
+# Check the ROS-DISTRO (ROS1 Noetic)
 sudo apt install ros-[DISTRO]-hector-trajectory-server
 ```
 
@@ -58,57 +69,51 @@ To use an Intel RealSense camera for **live mode** or **data collection**, you w
 - Verifying camera connection
 - Enabling live streaming or data recording
 
-## ⚙️ Installation <a id="installation"></a>
+### Install `aruco_ros` (Optional) <a id="aruco"></a>
 
-After installing the prerequisites, you can clone the repository and follow the commands below:
+vS-Graphs can operate independently of fiducial markers, but it also supports enhanced semantic labeling using detected markers (e.g., assigning room names) when a valid marker database is provided.
 
-### II. Cloning the `aruco_ros` Repository (optional) <a id="aruco"></a>
+If you would like to use marker-driven data augmentation to the generated scene graph, install the [`aruco_ros`](https://github.com/pal-robotics/aruco_ros) library:
 
-This package (available [here](https://github.com/pal-robotics/aruco_ros)) enables you to detect ArUco Markers in cameras' field of view. Accordingly, install it using the commands below in **the same folder (i.e., [workspace]/src)**:
-
-```
-cd ~/catkin_ws/src/
-
-# Cloning the latest code
+```bash
+# Clone (ROS1 Noetic)
 git clone -b noetic-devel git@github.com:pal-robotics/aruco_ros.git
 ```
 
-Instead of the original launch file, you can use the sample modified `marker_publisher.launch` file for this library available [here](doc/aruco_ros_marker_publisher.launch), which works fine with the live feed for RealSense cameras (`imageRaw` and `cameraInfo` should be changed based on the use case). Do not forget to set proper `ref_frame`, `markerSize`, `imageRaw`, and `cameraInfo` values in the launch file.
+> 🛎️ Note: Use the sample modified version of the marker detector launch file available [here](doc/template_aruco_ros.launch). This setup ensures proper marker detection and integration with vS-Graphs.
 
-### III. Cloning the Developed `scene_segment_ros` Repository <a id="segmenter"></a>
+### Install the In-house Scene Segmenter <a id="segmenter"></a>
 
-This package (in the open sourcing process) enables you to **segment the scene** and **detect semantic entities** in the scene. Accordingly, install it using the commands below in **the same folder (i.e., [workspace]/src)**:
+vS-Graphs relies on a ROS-based **Panoptic Scene Segmentation** module, available at [scene_segment_ros](https://github.com/snt-arg/scene_segment_ros), to semantically identify **building components** (i.e., walls and ground surfaces). This module supports multiple segmentation backends, including:
 
-<!-- available [here](https://github.com/snt-arg/scene_segment_ros) -->
+- [**YOSO**](https://github.com/hujiecpp/YOSO) _(recommended for best performance)_
+- [**PanopticFCN**](https://github.com/dvlab-research/PanopticFCN)
 
+Clone the repository and set it ready for integration:
+
+```bash
+# Clone (ROS1 Noetic)
+git clone --recurse-submodules git@github.com:snt-arg/scene_segment_ros.git
+
+# Install Python packages
+pip install -r src/requirements.txt
+
+# Follow the rest installation guide in the repository
 ```
-cd ~/catkin_ws/src/
 
-# Cloning the latest code
-git clone git@github.com:[repo]
-```
+### 🦊 Install Voxblox Skeleton <a id="voxblox"></a>
 
-You can then run the scene semantic segmentor using the commands `roslaunch segmenter_ros segmenter_pFCN.launch` for using the **PanopticFCN** model or `roslaunch segmenter_ros segmenter_yoso.launch` for YOSO model.
+To detect **structural elements** (such as rooms and corridors), vS-Graphs requires `loco planning` integrated with `voxblox`, available [here](https://github.com/snt-arg/mav_voxblox_planning/tree/master). This module provides free-space information crucial for **cluster-based structural element detection**. Clone and install the module using below commands:
 
-### IV. 🦊 Installing Voxblox Skeleton <a id="voxblox"></a>
-
-This package (available [here](https://github.com/snt-arg/mav_voxblox_planning/tree/master)) enables you to use `voxblox` and `loco planning` for cluster-based room detection. Accordingly, install it using the commands below in a workspace **not necessarily the same folder (i.e., [workspace]/src)**:
-
-```
-cd ~/catkin_ws/src/
-
-# Cloning the latest code
+```bash
+# Clone (ROS1 Noetic)
 git clone git@github.com:snt-arg/mav_voxblox_planning.git
 wstool init . ./mav_voxblox_planning/install/install_ssh.rosinstall
 wstool update
 catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release && catkin build
 ```
 
-### V. Installing Other Required Libraries <a id="libraries"></a>
-
-First, make sure that you have installed all the required dependencies, such as `ros-noetic-backward-ros` and `ros-noetic-rviz-visual-tools`, using the command `rosdep install --from-paths src --ignore-src -y`.
-
-### VI. Build
+## ⚙️ II. Build
 
 Build the installed libraries and modules using `catkin build`. As a shortcut, you can add a new alias to the `bashrc` file to run the environment whenever needed, like below:
 

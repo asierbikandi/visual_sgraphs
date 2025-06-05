@@ -56,7 +56,7 @@ roslaunch orb_slam3_ros vsgraphs_rgbd.launch 2>/dev/null
 
 #### ArUco Detector Integration <a id="aruco-integrate"></a>
 
-Note that given the input sensor (Mono, RGB-D, and Stereo), the parameters fed to `aruco_ros` varies. Regarding the sample launch file available [here](doc/aruco_ros_marker_publisher.launch), we can use the library as below:
+Note that given the input sensor (Mono, RGB-D, and Stereo), the parameters fed to `aruco_ros` varies. Regarding the sample launch file available [here](doc/template_aruco_ros.launch), we can use the library as below:
 
 - For Mono and RGB-D feed use `roslaunch aruco_ros marker_publisher.launch`,
 - For Stereo feed use `roslaunch aruco_ros marker_publisher.launch imageRaw:=/camera/infra1/image_rect_raw 
