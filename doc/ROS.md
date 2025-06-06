@@ -22,8 +22,8 @@ vS-Graphs interfaces with several ROS topics to process sensor data, publish sem
 
 | Topic                               | Msg Type                              | Description                                               |
 | ----------------------------------- | ------------------------------------- | --------------------------------------------------------- |
-| `/tf`                               | `tf2_msgs/TFMessage`                  | Camera and IMU-body transforms in the world frame         |
-| `/orb_slam3/camera_pose`            | `geometry_msgs/PoseStamped`           | Left camera pose in the world frame                       |
+| `/tf`                               | `tf2_msgs/TFMessage`                  | Camera transforms in the world frame                      |
+| `/orb_slam3/camera_pose`            | `geometry_msgs/PoseStamped`           | Camera pose in the world frame                            |
 | `/orb_slam3/body_odom`              | `nav_msgs/Odometry`                   | IMU-body odometry in the world frame                      |
 | `/orb_slam3/tracking_image`         | `sensor_msgs/Image`                   | Image with keypoints and tracking status overlay          |
 | `/orb_slam3/tracked_points`         | `sensor_msgs/PointCloud2`             | Currently tracked SLAM map points                         |
@@ -31,12 +31,12 @@ vS-Graphs interfaces with several ROS topics to process sensor data, publish sem
 | `/orb_slam3/kf_markers`             | `visualization_msgs/MarkerArray`      | Visualization markers for keyframe poses                  |
 | `/orb_slam3/keyframe_list`          | `nav_msgs/Path`                       | Full list of keyframes (poses)                            |
 | `/orb_slam3/keyframe_image`         | `segmenter_ros/VSGraphDataMsg`        | Keyframe data with semantic overlays                      |
-| `/orb_slam3/fiducial_markers`       | `visualization_msgs/MarkerArray`      | Detected fiducial (e.g., ArUco) markers                   |
-| `/orb_slam3/doors`                  | `visualization_msgs/MarkerArray`      | Detected doorways in the environment                      |
-| `/orb_slam3/plane_labels`           | `visualization_msgs/MarkerArray`      | Semantic labels for planes (walls, ground)                |
-| `/orb_slam3/plane_point_clouds`     | `sensor_msgs/PointCloud2`             | Point clouds of detected planes                           |
-| `/orb_slam3/segmented_point_clouds` | `sensor_msgs/PointCloud2`             | Scene point cloud with semantic segmentation              |
+| `/orb_slam3/fiducial_markers`       | `visualization_msgs/MarkerArray`      | Mapped fiducial (e.g., ArUco) markers in the world frame  |
+| `/orb_slam3/doors`                  | `visualization_msgs/MarkerArray`      | Mapped doorways in the environment                        |
+| `/orb_slam3/plane_labels`           | `visualization_msgs/MarkerArray`      | Semantic labels for building components (walls, ground)   |
+| `/orb_slam3/plane_point_clouds`     | `sensor_msgs/PointCloud2`             | Point clouds of detected building components              |
+| `/orb_slam3/segmented_point_clouds` | `sensor_msgs/PointCloud2`             | Point cloud after semantic segmentation                   |
 | `/orb_slam3/freespace_clusters`     | `sensor_msgs/PointCloud2`             | Clustered free-space regions used for structural analysis |
-| `/orb_slam3/all_mapped_walls`       | `orb_slam3_ros/vSGraphs_AllWallsData` | All wall segments identified for GNN-based room detection |
+| `/orb_slam3/all_mapped_walls`       | `orb_slam3_ros/vSGraphs_AllWallsData` | All wall segments identified (GNN-based room detection)   |
 | `/orb_slam3/rooms`                  | `visualization_msgs/MarkerArray`      | Detected structural elements (rooms and corridors)        |
 | `/orb_slam3/camera_pose_vis`        | `visualization_msgs/MarkerArray`      | Visualization markers for current camera pose             |
