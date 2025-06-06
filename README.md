@@ -15,62 +15,47 @@ Below diagram shows the detailed architecture of the **vS-Graphs** framework, hi
 
 ![vS-Graphs Flowchart](doc/flowchart.png "vS-Graphs Flowchart")
 
-## 🚀 Prerequisites and Installation
+## ⚙️ Prerequisites and Installation
 
 For system requirements, dependencies, and setup instructions, refer to the [Installation Guide](/doc/INSTALLATION.md).
 
-## 🔨 Configurations <a id="configurations"></a>
+## 🔨 Configurations
 
-You can find the configuration files for the application in the `config` folder. It contains some `Calibration` processes, camera parameter for various sensors, and some `rviz` files for different datasets. You can define your own `rviz` and `yaml` files according to the characteristics of the sensor you collected data with. A sample of how to set camera intrinsic and extrinsic parameters can be found [here](https://github.com/shanpenghui/ORB_SLAM3_Fixed#73-set-camera-intrinsic--extrinsic-parameters).
+You can read about the SLAM-related configuration parameters (independent of the `ROS` wrapper) in [the config folder](/config/README.md). These configurations can be modified in the [system_params.yaml](/config/system_params.yaml) file. For more information on ROS-related configurations and usage, see the [ROS parameter documentation](/doc/ROS.md) page.
 
-You can read about the configuration parameters (independent of the `ROS` wrapper) for performing SLAM [here](/config/README.md). They can be find and modified in [system_params.yaml](/config/system_params.yaml).
+## 🚀 Getting Started
 
-## 🚀 Run Examples <a id="run"></a>
+Once you have installed the required dependencies and configured the parameters, you are ready to run **vS-Graphs**! Follow the steps below to get started:
 
-1. You can download some sample dataset instances from the links provided below and run them using `rosbag play [sample].bag --clock [-s x]`:
-2. Run the ArUco marker detector module using `roslaunch aruco_ros marker_publisher.launch`
-3. Run the Semantic Segmentation module (pFCN) using `roslaunch segmenter_ros segmenter_pFCN.launch`
-4. Run VoxBlox Skeleton using `roslaunch voxblox_skeleton skeletonize_map_vsgraphs.launch 2>/dev/null`
+1. Start a core node using `roscore`
+2. Source vS-Graphs and run it by `roslaunch orb_slam3_ros vsgraphs_rgbd.launch [2>/dev/null]`. It will automatically run the vS-Graphs core and the semantic segmentation module for **building component** (walls and ground surfaces) recognition.
+3. (Optional) If you intend to detect **structural elements** (rooms and corridors) too, run the cluster-based solution using `roslaunch voxblox_skeleton skeletonize_map_vsgraphs.launch 2>/dev/null`.
 
-For a complete list of configurable launch arguments, see [Launch Parameters](/launch/README.md).
+   - In this case, you need to source `voxblox` with a `--extend` command, and then launch the framework:
 
-#### 🦊 Voxblox Integration <a id="voxblox-integrate"></a>
+   ```bash
+   source /opt/ros/noetic/setup.bash &&
+   source ~/[VSGRAPHS_PATH]/devel/setup.bash &&
+   source ~/[VOXBLOX_PATH]/devel/setup.bash --extend &&
+   roslaunch orb_slam3_ros vsgraphs_rgbd.launch
+   ```
 
-For detecting rooms, you need to use `voxblox skeleton` instead of the normal version of `voxblox`, as it uses free spaces for clustering in `skeletonize_map_vsgraphs` launch file.
+4. (Optional) If you have a database of ArUco markers representing room/corridor labels, do not forget to run `aruco_ros` using `roslaunch aruco_ros marker_publisher.launch`.
+5. Now, play a recorded `rosbag` file by running `rosbag play [sample].bag --clock`.
 
-If you want to use normal `voxblox` (faces challenges for room creation), you may need to first create a launch file that can be integrated into this framework. You can find a sample of such launch file [here](doc/voxblox_rs_rgbd.launch). Then, for running `voxblox`, you need to source it and run it in a separate terminal using `roslaunch voxblox_ros vsgraphs_rgbd.launch`.
+✨ For a complete list of configurable launch arguments, check the [Launch Parameters](/launch/README.md).
 
-Additionally, before running the framework, you need to source it, source `voxblox` with a `--extend` command, and then launch the framework.
+✨ For detailed description on how to use a RealSense D400 series camera for live feed and data collection, check [this page](/doc/RealSense/README.md).
 
-```
-source /opt/ros/noetic/setup.bash &&
-source ~/[VSGRAPHS_PATH]/devel/setup.bash &&
-source ~/[VOXBLOX_PATH]/devel/setup.bash --extend &&
-roslaunch orb_slam3_ros vsgraphs_rgbd.launch 2>/dev/null
-```
-
-[Note] As `voxblox` and `Visual S-Graphs` both need to access/modify `TF` data, it may become slow. So, in order to run it with less computation cost and avoid chunking the reconstructed map, you may need to:
-
-- Use the command `catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release` in `voxblox`'s workspace to build it in the release mode and run it again,
-- Run the rosbag file slower using `rosbag play [file] --clock -r 0.5`
-
-#### ArUco Detector Integration <a id="aruco-integrate"></a>
-
-Note that given the input sensor (Mono, RGB-D, and Stereo), the parameters fed to `aruco_ros` varies. Regarding the sample launch file available [here](doc/template_aruco_ros.launch), we can use the library as below:
-
-- For Mono and RGB-D feed use `roslaunch aruco_ros marker_publisher.launch`,
-- For Stereo feed use `roslaunch aruco_ros marker_publisher.launch imageRaw:=/camera/infra1/image_rect_raw 
-cameraInfo:=/camera/infra1/camera_info`
-
-Please refer to [this page](/doc/RealSense/README.md) for detailed description on how to use a RealSense D400 series camera for data collection.
-
-## 🤖 ROS Topics, Params and Services <a id="ros"></a>
-
-For more information on ROS-related configurations and usage, see the [ROS documentation](/doc/ROS.md).
+> 🛎️ Note: The current version of vS-Graphs supports **ROS Noetic** and is primarily tested on Ubuntu 20.04.
 
 ## 🐋 Docker
 
 For a fully reproducible and environment-independent setup, check the [Docker](/docker) section.
+
+## 📏 Benchmarking
+
+To evaluate vS-Graphs against other visual SLAM frameworks, read the [evaluation and benchmarking documentation](/evaluation/README.md).
 
 ## 📚 Citation
 
