@@ -113,20 +113,32 @@ wstool update
 catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release && catkin build
 ```
 
-## ⚙️ II. Build
+## ⚙️ II. Build the Project
 
-Build the installed libraries and modules using `catkin build`. As a shortcut, you can add a new alias to the `bashrc` file to run the environment whenever needed, like below:
+After installing all the required dependencies and modules listed above, clone the repository and build it using `catkin`. To do so, initialize a new Catkin workspace, clone the repository inside it, and build it, as detailed below:
 
+```bash
+# Create and initialize a new Catkin workspace (ROS1 Noetic)
+mkdir -p ~/vs_graphs_ws/src
+cd ~/vs_graphs_ws
+catkin init
+
+# Clone the vS-Graphs repository into the src folder
+cd src
+git clone git@github.com:snt-arg/visual_sgraphs.git
+
+# Install any missing dependencies (optional but recommended)
+cd ..
+rosdep install --from-paths src --ignore-src -r -y
+
+# Build the workspace
+source ~/vs_graphs_ws/devel/setup.bash
+catkin build
 ```
-alias sourceros='source /opt/ros/noetic/setup.bash'
-alias sourcevox="source ~/workspace/ros/voxblox_skeleton/devel/setup.bash"
-alias sourcerealsense='source ~/workspace/realsense/rs_ros/devel/setup.bash'
-alias sourcevsgraphs='source ~/workspace/ros/orbslam3_ros_ws/devel/setup.bash'
-```
 
-As a quick test, you can do as follows:
-
-- Run a `roscore`
-- Run the `aruco_ros` using `sourcevsgraphs` and then `roslaunch aruco_ros marker_publisher.launch [2>/dev/null]` for detecting multiple markers in the scene and publishing their poses.
-  - The final results (scene with detected markers) produced by `aruco_ros` are published and accessible on `/aruco_marker_publisher/result` and the pose of the markers will be shown using `rostopic echo /aruco_marker_publisher/markers`.
-- Run the Visual S-Graphs using `sourcevsgraphs` and then `roslaunch orb_slam3_ros vsgraphs_rgbd.launch [2>/dev/null]`
+> 🛎️ Note: You can define some alias inside the `.bashrc` file to simplify sourcing packages:
+>
+> - Source ROS `alias sourceros='source /opt/ros/noetic/setup.bash'`
+> - Source Voxblox Skeleton `alias sourcevox="source ~/voxblox_skeleton_ws/devel/setup.bash"`
+> - Source RealSense `alias sourcers='source ~/rs_ros_ws/devel/setup.bash'`
+> - Source vS-Graphs `alias sourcevsgraphs='source ~/vs_graphs_ws/devel/setup.bash`
