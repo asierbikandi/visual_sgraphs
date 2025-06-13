@@ -3,7 +3,7 @@ services:
     image: vsgraphs
     build:
       context: .
-      dockerfile: Noetic.Dockerfile
+      dockerfile: Jazzy.Dockerfile
       ssh:
         - default
       args:
@@ -40,6 +40,7 @@ services:
       - "/home/asier/mydockers/ubuntu24/ros_ws:/home/asier/ros2_ws"
       # Data Directories (** MODIFY **)
       - "/home/asier/Documents/datasets:/home/asier/datasets"
+
     network_mode: "host"
     command:
       tail -f /dev/null
