@@ -17,7 +17,7 @@
 
   <!-- [MODIFIED] Add a desired preset. (link: https://dev.intelrealsense.com/docs/d400-series-visual-presets) -->
   <!-- You need to give proper absolute address of the JSON file -->
-  <arg name="json_file_path"      default="~/HighAccuracyPreset.json"/>
+  <arg name="json_file_path"      default="/opt/ros/noetic/share/realsense2_camera/launch/includes/HighAccuracyPreset.json"/>
 
   <arg name="fisheye_width"       default="-1"/>
   <arg name="fisheye_height"      default="-1"/>

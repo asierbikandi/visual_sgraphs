@@ -22,18 +22,20 @@ services:
     runtime: nvidia
     privileged: true
     restart: always
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
     volumes:
       # Display
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      # - ~/.Xauthority:/root/.Xauthority:rw
+      # - ~/.Xauthority:/home/user/.Xauthority:rw
       - $XAUTHORITY:$XAUTHORITY:rw
       # SSH
       - $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
       # TMUX
-      - ~/.tmux:/root/.tmux:ro
-      - ~/.tmux.conf:/root/.tmux.conf:ro
+      - ~/.tmux:/home/user/.tmux:ro
+      - ~/.tmux.conf:/home/user/.tmux.conf:ro
       # Git
-      - ~/.gitconfig:/root/.gitconfig_local
+      - ~/.gitconfig:/home/user/.gitconfig_local
       # Dev
       - /dev:/dev:rw
       # Working Directories (** MODIFY **)

@@ -25,16 +25,16 @@ RUN apt-get update && apt-get install -y \
     build-essential
  
 ##### Install ROS 1 - Noetic #####
-# setup environment
+# Setup environment
 ENV ROS_DISTRO=noetic
  
-# setup keys
+# Setup keys
 RUN echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
  
-# install ros packages
+# Install ros packages
 RUN apt-get update && apt-get install -y \
-    ros-noetic-desktop-full
+    ros-$ROS_DISTRO-desktop-full
  
 # ROS related packages
 RUN apt-get install -y \
@@ -43,10 +43,12 @@ RUN apt-get install -y \
     python3-rosinstall-generator \
     python3-wstool \
     python3-catkin-tools \
-    ros-noetic-pcl-ros \
-    ros-noetic-backward-ros \
-    ros-noetic-rviz-visual-tools \
-    ros-noetic-hector-trajectory-server
+    ros-$ROS_DISTRO-pcl-ros \
+    ros-$ROS_DISTRO-backward-ros \
+    ros-$ROS_DISTRO-rviz-visual-tools \
+    ros-$ROS_DISTRO-hector-trajectory-server \
+    ros-$ROS_DISTRO-realsense2-camera \
+    ros-$ROS_DISTRO-rgbd-launch
  
 # ROS dependencies
 RUN rosdep init
@@ -63,7 +65,7 @@ RUN pip3 install networkx==3.1
 RUN pip3 install torch==2.0.1+cu118 -f  https://download.pytorch.org/whl/torch_stable.html
 RUN pip3 install torchvision==0.15.2+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
  
-# detectron and CLIP
+# Detectron2 and CLIP
 # Compute Capability 7.5 for T600 (SnT laptop) and 7.0 for V100 (HPC - Iris)
 ARG TORCH_CUDA_ARCH_LIST="7.5;7.0+PTX"
 ENV FORCE_CUDA="1"
@@ -106,35 +108,43 @@ RUN --mount=type=ssh git clone git@github.com:snt-arg/visual_sgraphs.git
 RUN --mount=type=ssh git clone git@github.com:snt-arg/scene_segment_ros.git
 RUN --mount=type=ssh git clone -b noetic-devel git@github.com:pal-robotics/aruco_ros.git
 
-# other libraries
+# Other libraries
 WORKDIR /workspace/src/visual_sgraphs/docker
 RUN pip3 install -r requirements.txt
+
 WORKDIR /workspace/src/
  
-# for ROS package: mav_voxblox_planning
+# For ROS package: mav_voxblox_planning
 RUN --mount=type=ssh git clone git@github.com:snt-arg/mav_voxblox_planning.git
 RUN --mount=type=ssh wstool init . ./mav_voxblox_planning/install/install_ssh.rosinstall
 RUN --mount=type=ssh wstool update
  
-# download the yoso checkpoint
+# Download the YOSO checkpoint
 RUN wget https://github.com/hujiecpp/YOSO/releases/download/v0.1/yoso_res50_coco.pth
 RUN mv yoso_res50_coco.pth /workspace/src/scene_segment_ros/include/
  
-# build the workspace
+# Build the workspace
 WORKDIR /workspace/
-RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin build -j12 -DCMAKE_BUILD_TYPE=Release && rosclean purge -y"
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin build -j10 -DCMAKE_BUILD_TYPE=Release && rosclean purge -y"
  
 ##### Miscalleanous #####
 RUN ldconfig
+
+# Copy the proper ArUco marker launch file
+RUN cp /workspace/src/visual_sgraphs/doc/template_aruco_ros.launch /workspace/src/aruco_ros/aruco_ros/launch/marker_publisher.launch
+
+# Copy the proper RealSense launch file and preset
+RUN cp /workspace/src/visual_sgraphs/doc/RealSense/rs_d435_rgbd.launch /opt/ros/noetic/share/realsense2_camera/launch/rs_rgbd.launch
+RUN cp /workspace/src/visual_sgraphs/doc/RealSense/presets/HighAccuracyPreset.json /opt/ros/noetic/share/realsense2_camera/launch/includes/HighAccuracyPreset.json
  
 ##### Clean up #####
-# remove the apt list files
+# Remove the apt list files
 RUN rm -rf /var/lib/apt/lists/*
  
-# remove packages no longer needed
+# Remove packages no longer needed
 RUN apt-get clean && apt-get autoremove -y
  
-# remove the ssh keys
+# Remove the ssh keys
 RUN rm -rf /root/.ssh/
  
 ##### Build entrypoint #####
@@ -147,7 +157,6 @@ RUN echo "#!/bin/bash" >> /entrypoint.sh \
 WORKDIR /workspace/
  
 ENTRYPOINT ["/entrypoint.sh"]
-
 USER $USERNAME
 CMD ["/bin/bash"]
 SHELL ["/bin/bash"]
