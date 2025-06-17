@@ -42,7 +42,7 @@ ros::Publisher pubTrackedMappoints, pubSegmentedPointcloud, pubPlanePointcloud, 
 ros::Publisher pubCameraPose, pubCameraPoseVis, pubOdometry, pubKeyFrameMarker, pubKFImage, pubKeyFrameList;
 ros::Time lastPlanePublishTime = ros::Time(0);
 
-bool saveMapService(orb_slam3_ros::SaveMap::Request &req, orb_slam3_ros::SaveMap::Response &res)
+bool saveMapService(vs_graphs::SaveMap::Request &req, vs_graphs::SaveMap::Response &res)
 {
     res.success = pSLAM->SaveMap(req.name);
 
@@ -54,7 +54,7 @@ bool saveMapService(orb_slam3_ros::SaveMap::Request &req, orb_slam3_ros::SaveMap
     return res.success;
 }
 
-bool saveMapPointsAsPCDService(orb_slam3_ros::SaveMap::Request &req, orb_slam3_ros::SaveMap::Response &res)
+bool saveMapPointsAsPCDService(vs_graphs::SaveMap::Request &req, vs_graphs::SaveMap::Response &res)
 {
     res.success = pSLAM->SaveMapPointsAsPCD(req.name);
 
@@ -66,7 +66,7 @@ bool saveMapPointsAsPCDService(orb_slam3_ros::SaveMap::Request &req, orb_slam3_r
     return res.success;
 }
 
-bool saveTrajectoryService(orb_slam3_ros::SaveMap::Request &req, orb_slam3_ros::SaveMap::Response &res)
+bool saveTrajectoryService(vs_graphs::SaveMap::Request &req, vs_graphs::SaveMap::Response &res)
 {
     const string cameraTrajectoryFile = req.name + "_cam_traj.txt";
     const string keyframeTrajectoryFile = req.name + "_kf_traj.txt";
@@ -121,7 +121,7 @@ void setupPublishers(ros::NodeHandle &nodeHandler, image_transport::ImageTranspo
     pubFiducialMarker = nodeHandler.advertise<visualization_msgs::MarkerArray>(node_name + "/fiducial_markers", 1);
     pubSegmentedPointcloud = nodeHandler.advertise<sensor_msgs::PointCloud2>(node_name + "/segmented_point_clouds", 1);
     // [Building Components] Publishing Walls for GNN-based Room Detection
-    pubAllWalls = nodeHandler.advertise<orb_slam3_ros::vSGraphs_AllWallsData>(node_name + "/all_mapped_walls", 10);
+    pubAllWalls = nodeHandler.advertise<vs_graphs::vSGraphs_AllWallsData>(node_name + "/all_mapped_walls", 10);
 
     // Structural Elements
     pubRoom = nodeHandler.advertise<visualization_msgs::MarkerArray>(node_name + "/rooms", 1);
@@ -262,7 +262,7 @@ void publishCameraPose(Sophus::SE3f Tcw_SE3f, ros::Time msgTime)
     cameraVisual.mesh_use_embedded_materials = true;
     cameraVisual.type = visualization_msgs::Marker::MESH_RESOURCE;
     cameraVisual.mesh_resource =
-        "package://orb_slam3_ros/config/Assets/camera.dae";
+        "package://vs_graphs/config/Assets/camera.dae";
 
     cameraVisual.pose.position.x = Tcw_SE3f.translation().x();
     cameraVisual.pose.position.y = Tcw_SE3f.translation().y();
@@ -393,7 +393,7 @@ void publishKeyFrameImages(std::vector<ORB_SLAM3::KeyFrame *> keyframe_vec, ros:
 
 void publishAllMappedWalls(std::vector<ORB_SLAM3::Plane *> walls, ros::Time msgTime)
 {
-    orb_slam3_ros::vSGraphs_AllWallsData wallDataMsg;
+    vs_graphs::vSGraphs_AllWallsData wallDataMsg;
 
     // Fill the data message with wall information
     wallDataMsg.header.stamp = msgTime;
@@ -417,7 +417,7 @@ void publishAllMappedWalls(std::vector<ORB_SLAM3::Plane *> walls, ros::Time msgT
         }
 
         // Fill the wall data
-        orb_slam3_ros::vSGraphs_WallData wallData;
+        vs_graphs::vSGraphs_WallData wallData;
 
         wallData.length = length;
         wallData.id = wall->getId();
@@ -669,7 +669,7 @@ void publishFiducialMarkers(std::vector<ORB_SLAM3::Marker *> markers, ros::Time 
         fiducial_marker.header.frame_id = frameBC;
         fiducial_marker.type = visualization_msgs::Marker::MESH_RESOURCE;
         fiducial_marker.mesh_resource =
-            "package://orb_slam3_ros/config/Assets/aruco_marker.dae";
+            "package://vs_graphs/config/Assets/aruco_marker.dae";
 
         fiducial_marker.pose.position.x = markerPose.translation().x();
         fiducial_marker.pose.position.y = markerPose.translation().y();
@@ -715,7 +715,7 @@ void publishDoors(std::vector<ORB_SLAM3::Door *> doors, ros::Time msgTime)
         door.header.frame_id = frameBC;
         door.type = visualization_msgs::Marker::MESH_RESOURCE;
         door.mesh_resource =
-            "package://orb_slam3_ros/config/Assets/door.dae";
+            "package://vs_graphs/config/Assets/door.dae";
 
         // Rotation and displacement for better visualization
         Sophus::SE3f rotatedDoorPose = doorPose * Sophus::SE3f::rotX(-M_PI_2);
@@ -934,8 +934,8 @@ void publishRooms(std::vector<ORB_SLAM3::Room *> rooms, ros::Time msgTime)
     {
         // Variables
         string roomName = rooms[idx]->getName();
-        string definedRoom = "package://orb_slam3_ros/config/Assets/room.dae";
-        string undefinedRoom = "package://orb_slam3_ros/config/Assets/qmark.dae";
+        string definedRoom = "package://vs_graphs/config/Assets/room.dae";
+        string undefinedRoom = "package://vs_graphs/config/Assets/qmark.dae";
         string roomMesh = rooms[idx]->getHasKnownLabel() ? definedRoom : undefinedRoom;
 
         // Create color for room (orange for candidate, magenta for corridor, violet for normal room)
@@ -1316,7 +1316,7 @@ void setVoxbloxSkeletonCluster(const visualization_msgs::MarkerArray &skeletonAr
     pSLAM->setSkeletonCluster(skeletonClusterPoints);
 }
 
-void setGNNBasedRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms) {
+void setGNNBasedRoomCandidates(const vs_graphs::vSGraphs_AllDetectdetRooms &msgGNNRooms) {
     // Reset the buffer
     gnnRoomCandidates.clear();
 

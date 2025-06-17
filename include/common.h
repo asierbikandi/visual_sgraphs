@@ -61,7 +61,7 @@
 #include <message_filters/sync_policies/approximate_time.h>
 
 // This file is created automatically, see here http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv#Creating_a_srv
-#include <orb_slam3_ros/SaveMap.h>
+#include <vs_graphs/SaveMap.h>
 
 // Transformation process
 #include <pcl_ros/transforms.h>
@@ -83,8 +83,8 @@
 #include "Semantic/Marker.h"
 
 // Custom Messages
-#include <orb_slam3_ros/vSGraphs_AllWallsData.h>
-#include <orb_slam3_ros/vSGraphs_AllDetectdetRooms.h>
+#include <vs_graphs/vSGraphs_AllWallsData.h>
+#include <vs_graphs/vSGraphs_AllDetectdetRooms.h>
 
 using json = nlohmann::json;
 
@@ -149,9 +149,9 @@ void publishAllMappedWalls(std::vector<ORB_SLAM3::Plane *>, ros::Time);
 
 void clearKFClsClouds(std::vector<ORB_SLAM3::KeyFrame *>);
 
-bool saveMapService(orb_slam3_ros::SaveMap::Request &, orb_slam3_ros::SaveMap::Response &);
-bool saveTrajectoryService(orb_slam3_ros::SaveMap::Request &, orb_slam3_ros::SaveMap::Response &);
-bool saveMapPointsAsPCDService(orb_slam3_ros::SaveMap::Request &, orb_slam3_ros::SaveMap::Response &);
+bool saveMapService(vs_graphs::SaveMap::Request &, vs_graphs::SaveMap::Response &);
+bool saveTrajectoryService(vs_graphs::SaveMap::Request &, vs_graphs::SaveMap::Response &);
+bool saveMapPointsAsPCDService(vs_graphs::SaveMap::Request &, vs_graphs::SaveMap::Response &);
 
 /**
  * @brief Converts a SE3f to a cv::Mat
@@ -215,4 +215,4 @@ void setVoxbloxSkeletonCluster(const visualization_msgs::MarkerArray &skeletonAr
  * @brief Gets the set of room candidates detected by the GNN-based room detection module
  * @param msgGNNRooms The message containing the detected room candidates
  */
-void setGNNBasedRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms);
+void setGNNBasedRoomCandidates(const vs_graphs::vSGraphs_AllDetectdetRooms &msgGNNRooms);

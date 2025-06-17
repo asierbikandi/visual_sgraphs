@@ -28,7 +28,7 @@ You can read about the SLAM-related configuration parameters (independent of the
 Once you have installed the required dependencies and configured the parameters, you are ready to run **vS-Graphs**! Follow the steps below to get started:
 
 1. Start a core node using `roscore`
-2. Source vS-Graphs and run it by `roslaunch orb_slam3_ros vsgraphs_rgbd.launch [2>/dev/null]`. It will automatically run the vS-Graphs core and the semantic segmentation module for **building component** (walls and ground surfaces) recognition.
+2. Source vS-Graphs and run it by `roslaunch vs_graphs vsgraphs_rgbd.launch [2>/dev/null]`. It will automatically run the vS-Graphs core and the semantic segmentation module for **building component** (walls and ground surfaces) recognition.
 3. (Optional) If you intend to detect **structural elements** (rooms and corridors) too, run the cluster-based solution using `roslaunch voxblox_skeleton skeletonize_map_vsgraphs.launch 2>/dev/null`.
 
    - In this case, you need to source `voxblox` with a `--extend` command, and then launch the framework:
@@ -37,7 +37,7 @@ Once you have installed the required dependencies and configured the parameters,
    source /opt/ros/noetic/setup.bash &&
    source ~/[VSGRAPHS_PATH]/devel/setup.bash &&
    source ~/[VOXBLOX_PATH]/devel/setup.bash --extend &&
-   roslaunch orb_slam3_ros vsgraphs_rgbd.launch
+   roslaunch vs_graphs vsgraphs_rgbd.launch
    ```
 
 4. (Optional) If you have a database of ArUco markers representing room/corridor labels, do not forget to run `aruco_ros` using `roslaunch aruco_ros marker_publisher.launch`.
