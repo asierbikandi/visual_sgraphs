@@ -60,5 +60,5 @@ docker compose up -d
 docker exec -it vsgraphs bash
 
 # Inside the container
-roslaunch orb_slam3_ros vs_graphs.launch
+roslaunch vs_graphs vs_graphs.launch
 ```

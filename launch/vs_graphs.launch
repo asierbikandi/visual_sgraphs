@@ -16,14 +16,14 @@
     <param name="use_sim_time" value="$(arg offline)" />
 
     <!-- VS-Graphs Node -->
-    <node name="orb_slam3" pkg="orb_slam3_ros" cwd="node" type="ros_rgbd" output="screen">
+    <node pkg="vs_graphs" type="ros_rgbd" cwd="node" name="vs_graphs" output="screen">
         <!-- Remaps -->
         <remap from="/camera/rgb/image_raw" to="$(arg rgb_image_topic)"/>
         <remap from="/camera/depth_registered/image_raw" to="$(arg depth_image_topic)"/>
         <!-- Files -->
-        <param name="voc_file" type="string" value="$(find orb_slam3_ros)/orb_slam3/Vocabulary/ORBvoc.txt.bin"/>
-        <param name="settings_file" type="string" value="$(find orb_slam3_ros)/config/RGB-D/$(arg sensor_config).yaml"/>
-        <param name="sys_params_file" type="string" value="$(find orb_slam3_ros)/config/system_params.yaml"/>
+        <param name="voc_file" type="string" value="$(find vs_graphs)/orb_slam3/Vocabulary/ORBvoc.txt.bin"/>
+        <param name="settings_file" type="string" value="$(find vs_graphs)/config/RGB-D/$(arg sensor_config).yaml"/>
+        <param name="sys_params_file" type="string" value="$(find vs_graphs)/config/system_params.yaml"/>
         <!-- Environment -->
         <param name="static_transform" value="true" />
         <param name="roll" type="double" value="0.0" />
@@ -45,7 +45,7 @@
     <node pkg="tf" type="static_transform_publisher" name="camera_to_camera_optical" args="0 0 0 0 0 0 camera camera_color_optical_frame 10" />
 
     <!-- Trajectory Path Server -->
-    <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_orb_slam3" output="screen" ns="orb_slam3_ros" >
+    <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_orb_slam3" output="screen" ns="vs_graphs" >
         <param name="/target_frame_name" value="/map" />
         <param name="/source_frame_name" value="/$(arg camera_frame)" />
         <param name="/trajectory_update_rate" value="20.0" />
@@ -53,7 +53,7 @@
     </node>
     
     <!-- RViz -->
-    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find orb_slam3_ros)/config/Visualization/vsgraphs_rgbd.rviz" output="screen" />
+    <node if="$(arg launch_rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find vs_graphs)/config/Visualization/vsgraphs_rgbd.rviz" output="screen" />
 
     <!-- Depth to Point Cloud -->
     <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />

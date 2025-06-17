@@ -19,13 +19,13 @@ This file documents the available _launch-time arguments_ that can be passed whe
 To launch the system with default parameters, use the following command:
 
 ```bash
-roslaunch orb_slam3_ros vs_graphs.launch
+roslaunch vs_graphs vs_graphs.launch
 ```
 
 ## 📸 Live Mode - RealSense D435(i)
 
 ```bash
-roslaunch orb_slam3_ros vs_graphs.launch offline:=false
+roslaunch vs_graphs vs_graphs.launch offline:=false
 ```
 
 > 🛎️ Tip: Setting `offline` argument avoids **TF** conflicts by using live _RealSense TF_ instead of the one from the framework.
@@ -54,7 +54,7 @@ To use the [ICL dataset](https://www.doc.ic.ac.uk/~ahanda/VaFRIC/iclnuim.html) r
 Or simply launch:
 
 ```bash
-roslaunch orb_slam3_ros vs_graphs.launch sensor_config:=ICL depth_image_topic:=/camera/depth/image_raw
+roslaunch vs_graphs vs_graphs.launch sensor_config:=ICL depth_image_topic:=/camera/depth/image_raw
 ```
 
 ## 🧪 Using the OpenLoris Dataset
@@ -72,7 +72,7 @@ To use the [OpenLoris dataset](https://lifelong-robotic-vision.github.io/dataset
 Or simply launch:
 
 ```bash
-roslaunch orb_slam3_ros vs_graphs.launch sensor_config:=OpenLorisScene rgb_image_topic:=/d400/color/image_raw depth_image_topic:=/d400/aligned_depth_to_color/image_raw rgb_camera_info_topic:=/d400/color/camera_info camera_frame:=d400_color
+roslaunch vs_graphs vs_graphs.launch sensor_config:=OpenLorisScene rgb_image_topic:=/d400/color/image_raw depth_image_topic:=/d400/aligned_depth_to_color/image_raw rgb_camera_info_topic:=/d400/color/camera_info camera_frame:=d400_color
 ```
 
 ## 🧪 Using the ScanNet Dataset
@@ -87,7 +87,7 @@ To use the [ScanNet dataset](http://www.scan-net.org/) rosbags with `vS-Graphs`,
 Or simply launch:
 
 ```bash
-roslaunch orb_slam3_ros vs_graphs.launch sensor_config:=ScanNet depth_image_topic:=/camera/depth/image_raw
+roslaunch vs_graphs vs_graphs.launch sensor_config:=ScanNet depth_image_topic:=/camera/depth/image_raw
 ```
 
 ## 🧪 Using the TUM RGB-D Dataset
@@ -105,5 +105,5 @@ To use the [TUM RGB-D dataset](https://cvg.cit.tum.de/data/datasets/rgbd-dataset
 Or simply launch:
 
 ```bash
-roslaunch orb_slam3_ros vs_graphs.launch rgb_image_topic:=/camera/rgb/image_color depth_image_topic:=/camera/depth/image rgb_camera_info_topic:=/camera/rgb/camera_info sensor_config:=TUM3 camera_frame:=kinect
+roslaunch vs_graphs vs_graphs.launch rgb_image_topic:=/camera/rgb/image_color depth_image_topic:=/camera/depth/image rgb_camera_info_topic:=/camera/rgb/camera_info sensor_config:=TUM3 camera_frame:=kinect
 ```
