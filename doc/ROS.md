@@ -14,7 +14,7 @@ vS-Graphs interfaces with several ROS topics to process sensor data, publish sem
 | `/camera/color/image_segment`        | `segmenter_ros::SegmenterDataMsg`           | Semantic segmentation results                          |
 | `/camera/color/image_segment_vis`    | `segmenter_ros::VSGraphDataMsg`             | Visualized semantic segmentation frame                 |
 | `/voxblox_skeletonizer/sparse_graph` | `visualization_msgs::MarkerArray`           | Sparse graph representation of the free-space topology |
-| `/gnn_room_detector`                 | `orb_slam3_ros::vSGraphs_AllDetectdetRooms` | GNN-based room segmentation output                     |
+| `/gnn_room_detector`                 | `orb_slam3_ros::VSGraphsAllDetectdetRooms` | GNN-based room segmentation output                     |
 
 > 💡 To customize input topics and other parameters at launch time, please refer to the [⚙️ vS-Graphs Launch Arguments](../launch/README.md) page for a full list and descriptions.
 
@@ -37,6 +37,6 @@ vS-Graphs interfaces with several ROS topics to process sensor data, publish sem
 | `/orb_slam3/plane_point_clouds`     | `sensor_msgs/PointCloud2`             | Point clouds of detected building components              |
 | `/orb_slam3/segmented_point_clouds` | `sensor_msgs/PointCloud2`             | Point cloud after semantic segmentation                   |
 | `/orb_slam3/freespace_clusters`     | `sensor_msgs/PointCloud2`             | Clustered free-space regions used for structural analysis |
-| `/orb_slam3/all_mapped_walls`       | `orb_slam3_ros/vSGraphs_AllWallsData` | All wall segments identified (GNN-based room detection)   |
+| `/orb_slam3/all_mapped_walls`       | `orb_slam3_ros/VSGraphsAllWallsData` | All wall segments identified (GNN-based room detection)   |
 | `/orb_slam3/rooms`                  | `visualization_msgs/MarkerArray`      | Detected structural elements (rooms and corridors)        |
 | `/orb_slam3/camera_pose_vis`        | `visualization_msgs/MarkerArray`      | Visualization markers for current camera pose             |
