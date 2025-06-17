@@ -88,10 +88,39 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 ##### Clone repositories #####
 # Pangolin
 # RUN apt-get install libepoxy-dev -y
-RUN apt-get update && apt-get install -y libepoxy-dev
-WORKDIR /opt/
+# RUN apt-get update && apt-get install -y libepoxy-dev
+# WORKDIR /opt/
+# # RUN git clone --branch v0.8 --depth 1 https://github.com/stevenlovegrove/Pangolin.git && \
+# RUN git clone https://github.com/stevenlovegrove/Pangolin.git && \
+#     cd Pangolin && \
+#     mkdir build && cd build && \
+#     cmake .. && \
+#     make -j && \
+#     make install
+
+# Pangolin
+# RUN apt-get update && apt-get install libepoxy-dev -y
+# WORKDIR /opt/
 # RUN git clone --branch v0.8 --depth 1 https://github.com/stevenlovegrove/Pangolin.git && \
-RUN git clone https://github.com/stevenlovegrove/Pangolin.git && \
+#     cd Pangolin && \
+#     mkdir build && cd build && \
+#     cmake .. && \
+#     make -j && \
+#     make install
+
+# Pangolin - Use a more recent version that works with modern compilers
+RUN apt-get update && apt-get install -y \
+    libepoxy-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    freeglut3-dev \
+    libglew-dev \
+    cmake \
+    build-essential \
+    git
+
+WORKDIR /opt/
+RUN git clone --branch v0.9.1 --depth 1 https://github.com/stevenlovegrove/Pangolin.git && \
     cd Pangolin && \
     mkdir build && cd build && \
     cmake .. && \
@@ -167,6 +196,12 @@ RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && colcon build --symli
 RUN ldconfig
 # RUN echo 'export PS1="[\u@\h \W] 🐳 "' >> /home/asier/.bashrc
 RUN echo 'export PS1="[\u@\h \W] 🐳 "' >> /home/$USERNAME/.bashrc
+
+#### For cmakelist of vsual_sgraphs #####
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y ros-jazzy-rviz-visual-tools
+# RUN sudo apt update && sudo apt install ros-jazzy-rviz-visual-tools
+RUN sudo apt install ros-jazzy-pcl-ros
 
 ##### Clean up #####
 # remove the apt list files
