@@ -29,7 +29,7 @@ class ImageGrabber
 public:
     ImageGrabber() {};
 
-    void GrabArUcoMarker(const aruco_msgs::MarkerArray &msg);
+    // void GrabArUcoMarker(const aruco_msgs::MarkerArray &msg);
     void GrabSegmentation(const segmenter_ros::SegmenterDataMsg &msgSegImage);
     void GrabVoxbloxSkeletonGraph(const visualization_msgs::MarkerArray &msgSkeletonGraph);
     void GrabGNNRoomCandidates(const orb_slam3_ros::VSGraphsAllDetectdetRooms &msgGNNRooms);
@@ -105,8 +105,8 @@ int main(int argc, char **argv)
     sync.registerCallback(boost::bind(&ImageGrabber::GrabRGBD, &igb, _1, _2, _3));
 
     // Subscribe to the markers detected by `aruco_ros` library
-    ros::Subscriber subAruco = nodeHandler.subscribe("/aruco_marker_publisher/markers", 1,
-                                                     &ImageGrabber::GrabArUcoMarker, &igb);
+    // ros::Subscriber subAruco = nodeHandler.subscribe("/aruco_marker_publisher/markers", 1,
+    //                                                  &ImageGrabber::GrabArUcoMarker, &igb);
 
     // Subscriber for images obtained from the Semantic Segmentater
     ros::Subscriber subSegmentedImage = nodeHandler.subscribe("/camera/color/image_segment", 50,
@@ -182,11 +182,11 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sens
  *
  * @param msgMarkerArray The markers detected by the `aruco_ros` library
  */
-void ImageGrabber::GrabArUcoMarker(const aruco_msgs::MarkerArray &msgMarkerArray)
-{
-    // Pass the visited markers to a buffer to be processed later
-    addMarkersToBuffer(msgMarkerArray);
-}
+// void ImageGrabber::GrabArUcoMarker(const aruco_msgs::MarkerArray &msgMarkerArray)
+// {
+//     // Pass the visited markers to a buffer to be processed later
+//     addMarkersToBuffer(msgMarkerArray);
+// }
 
 /**
  * @brief Callback function to get scene segmentation results from the SemanticSegmenter module

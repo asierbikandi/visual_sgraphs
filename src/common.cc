@@ -1218,43 +1218,43 @@ tf::Transform SE3fToTFTransform(Sophus::SE3f data)
     return tf::Transform(rotationTF, translationTF);
 }
 
-void addMarkersToBuffer(const aruco_msgs::MarkerArray &markerArray)
-{
-    // The list of markers observed in the current frame
-    std::vector<ORB_SLAM3::Marker *> currentMarkers;
+// void addMarkersToBuffer(const aruco_msgs::MarkerArray &markerArray)
+// {
+//     // The list of markers observed in the current frame
+//     std::vector<ORB_SLAM3::Marker *> currentMarkers;
 
-    // Process the received marker array
-    for (const auto &marker : markerArray.markers)
-    {
-        // Access information of each passed ArUco marker
-        int markerId = marker.id;
-        double visitTime = marker.header.stamp.toSec();
-        geometry_msgs::Pose markerPose = marker.pose.pose;
-        geometry_msgs::Point markerPosition = markerPose.position;            // (x,y,z)
-        geometry_msgs::Quaternion markerOrientation = markerPose.orientation; // (x,y,z,w)
+//     // Process the received marker array
+//     for (const auto &marker : markerArray.markers)
+//     {
+//         // Access information of each passed ArUco marker
+//         int markerId = marker.id;
+//         double visitTime = marker.header.stamp.toSec();
+//         geometry_msgs::Pose markerPose = marker.pose.pose;
+//         geometry_msgs::Point markerPosition = markerPose.position;            // (x,y,z)
+//         geometry_msgs::Quaternion markerOrientation = markerPose.orientation; // (x,y,z,w)
 
-        Eigen::Vector3f markerTranslation(markerPosition.x, markerPosition.y, markerPosition.z);
-        Eigen::Quaternionf markerQuaternion(markerOrientation.w, markerOrientation.x,
-                                            markerOrientation.y, markerOrientation.z);
-        Sophus::SE3f normalizedPose(markerQuaternion, markerTranslation);
+//         Eigen::Vector3f markerTranslation(markerPosition.x, markerPosition.y, markerPosition.z);
+//         Eigen::Quaternionf markerQuaternion(markerOrientation.w, markerOrientation.x,
+//                                             markerOrientation.y, markerOrientation.z);
+//         Sophus::SE3f normalizedPose(markerQuaternion, markerTranslation);
 
-        // Create a marker object of the currently visited marker
-        ORB_SLAM3::Marker *currentMarker = new ORB_SLAM3::Marker();
-        currentMarker->setOpId(-1);
-        currentMarker->setId(markerId);
-        currentMarker->setTime(visitTime);
-        currentMarker->setMarkerInGMap(false);
-        currentMarker->setLocalPose(normalizedPose);
-        currentMarker->setMarkerType(ORB_SLAM3::Marker::markerVariant::UNKNOWN);
+//         // Create a marker object of the currently visited marker
+//         ORB_SLAM3::Marker *currentMarker = new ORB_SLAM3::Marker();
+//         currentMarker->setOpId(-1);
+//         currentMarker->setId(markerId);
+//         currentMarker->setTime(visitTime);
+//         currentMarker->setMarkerInGMap(false);
+//         currentMarker->setLocalPose(normalizedPose);
+//         currentMarker->setMarkerType(ORB_SLAM3::Marker::markerVariant::UNKNOWN);
 
-        // Add it to the list of observed markers
-        currentMarkers.push_back(currentMarker);
-    }
+//         // Add it to the list of observed markers
+//         currentMarkers.push_back(currentMarker);
+//     }
 
-    // Add the new markers to the list of markers in buffer
-    if (currentMarkers.size() > 0)
-        markersBuffer.push_back(currentMarkers);
-}
+//     // Add the new markers to the list of markers in buffer
+//     if (currentMarkers.size() > 0)
+//         markersBuffer.push_back(currentMarkers);
+// }
 
 std::pair<double, std::vector<ORB_SLAM3::Marker *>> findNearestMarker(double frameTimestamp)
 {

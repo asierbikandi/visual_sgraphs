@@ -81,11 +81,9 @@
 
 #include <segmenter_ros/msg/vs_graph_data_msg.hpp>
 #include <segmenter_ros/msg/segmenter_data_msg.hpp>
-// #include <segmenter_ros/VSGraphDataMsg.h>
-// #include <segmenter_ros/SegmenterDataMsg.h>
 #include <nav_msgs/msg/path.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
-#include <pcl_conversions/pcl_conversions.hpp>
+#include <pcl_conversions/pcl_conversions.h>
 #include <rviz_visual_tools/rviz_visual_tools.hpp>
 
 #include <message_filters/subscriber.hpp>
@@ -96,7 +94,7 @@
 #include <orb_slam3_ros/srv/save_map.hpp>
 
 // Transformation process
-#include <pcl_ros/transform.hpp>
+#include <pcl_ros/transforms.hpp>
 #include <tf2/transform_datatypes.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 
@@ -107,7 +105,7 @@
 #include "Types/SystemParams.h"
 
 // ArUco-ROS library
-#include <aruco_msgs/MarkerArray.h>
+// #include <aruco_msgs/MarkerArray.h>
 
 // Semantics
 #include "Semantic/Door.h"
@@ -229,7 +227,7 @@ void publishFreeSpaceClusters(std::vector<std::vector<Eigen::Vector3d>>, rclcpp:
  * @brief Adds the markers to the buffer to be processed
  * @param markerArray The array of markers received from `aruco_ros`
  */
-void addMarkersToBuffer(const aruco_msgs::MarkerArray &markerArray);
+// void addMarkersToBuffer(const aruco_msgs::MarkerArray &markerArray);
 
 /**
  * @brief Avoids adding duplicate markers to the buffer by checking the timestamp
