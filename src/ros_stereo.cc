@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 
 void ImageGrabber::GrabStereo(const sensor_msgs::ImageConstPtr &msgLeft, const sensor_msgs::ImageConstPtr &msgRight)
 {
-    ros::Time msg_time = msgLeft->header.stamp;
+    rclcpp::Time msg_time = msgLeft->header.stamp;
 
     // Copy the ros image message to cv::Mat.
     cv_bridge::CvImageConstPtr cv_ptrLeft, cv_ptrRight;

@@ -203,7 +203,7 @@ void ImageGrabber::SyncWithImu()
                 continue;
 
             this->mBufMutex.lock();
-            ros::Time msg_time = imgRGBBuf.front()->header.stamp;
+            rclcpp::Time msg_time = imgRGBBuf.front()->header.stamp;
             im = GetImage(imgRGBBuf.front());
             imgRGBBuf.pop();
             depth = GetImage(imgDBuf.front());

@@ -197,7 +197,7 @@ void ImageGrabber::SyncWithImu()
 
             this->mBufMutex.lock();
             im = GetImage(img0Buf.front());
-            ros::Time msg_time = img0Buf.front()->header.stamp;
+            rclcpp::Time msg_time = img0Buf.front()->header.stamp;
             img0Buf.pop();
             this->mBufMutex.unlock();
 

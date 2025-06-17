@@ -223,7 +223,7 @@ void ImageGrabber::SyncWithImu()
 
             this->mBufMutexLeft.lock();
             imLeft = GetImage(imgLeftBuf.front());
-            ros::Time msg_time = imgLeftBuf.front()->header.stamp;
+            rclcpp::Time msg_time = imgLeftBuf.front()->header.stamp;
             imgLeftBuf.pop();
             this->mBufMutexLeft.unlock();
 

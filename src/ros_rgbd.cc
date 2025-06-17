@@ -32,7 +32,7 @@ public:
     void GrabArUcoMarker(const aruco_msgs::MarkerArray &msg);
     void GrabSegmentation(const segmenter_ros::SegmenterDataMsg &msgSegImage);
     void GrabVoxbloxSkeletonGraph(const visualization_msgs::MarkerArray &msgSkeletonGraph);
-    void GrabGNNRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms);
+    void GrabGNNRoomCandidates(const orb_slam3_ros::VSGraphsAllDetectdetRooms &msgGNNRooms);
     void GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sensor_msgs::ImageConstPtr &msgD,
                   const sensor_msgs::PointCloud2ConstPtr &msgPC);
 };
@@ -173,7 +173,7 @@ void ImageGrabber::GrabRGBD(const sensor_msgs::ImageConstPtr &msgRGB, const sens
                          cv_ptrRGB->header.stamp.toSec());
     }
 
-    ros::Time msgTime = cv_ptrRGB->header.stamp;
+    rclcpp::Time msgTime = cv_ptrRGB->header.stamp;
     publishTopics(msgTime);
 }
 
@@ -236,7 +236,7 @@ void ImageGrabber::GrabVoxbloxSkeletonGraph(const visualization_msgs::MarkerArra
  *
  * @param msgGNNRooms The room candidates detected by the GNN module
  */
-void ImageGrabber::GrabGNNRoomCandidates(const orb_slam3_ros::vSGraphs_AllDetectdetRooms &msgGNNRooms)
+void ImageGrabber::GrabGNNRoomCandidates(const orb_slam3_ros::VSGraphsAllDetectdetRooms &msgGNNRooms)
 {
     // Set the GNN room candidates in the SLAM system
     setGNNBasedRoomCandidates(msgGNNRooms);

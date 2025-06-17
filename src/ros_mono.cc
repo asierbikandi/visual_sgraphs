@@ -143,7 +143,7 @@ void ImageGrabber::GrabImage(const sensor_msgs::ImageConstPtr &msg)
     else
         Sophus::SE3f Tcw = pSLAM->TrackMonocular(cv_ptr->image, cv_ptr->header.stamp.toSec());
 
-    ros::Time msg_time = msg->header.stamp;
+    rclcpp::Time msg_time = msg->header.stamp;
     publishTopics(msg_time);
 }
 
