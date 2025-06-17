@@ -3,7 +3,7 @@ services:
     image: vsgraphs
     build:
       context: .
-      dockerfile: Noetic.Dockerfile
+      dockerfile: Jazzy.Dockerfile
       ssh:
         - default
       args:
@@ -39,20 +39,21 @@ services:
       # Dev
       - /dev:/dev:rw
       # Working Directories (** MODIFY **)
-      - "[visual_sgraphs-path]:/workspace/src/visual_sgraphs:rw"
+      - "/home/asier/mydockers/ubuntu24/ros_ws:/home/asier/ros2_ws"
       # Data Directories (** MODIFY **)
-      - "[dataset-path]:/root/datasets"
+      - "/home/asier/Documents/datasets:/home/asier/datasets"
+
     network_mode: "host"
     command:
       tail -f /dev/null
       # Used to set correct U/G(ID) for shared folder
-    depends_on:
-      - volume-init
-  volume-init:
-    image: busybox
-    command: ["chown", "-R", "1000:1000", "/workspace/src/visual_sgraphs"]
-    volumes:
-      # Working Directories (** MODIFY **)
-      - "[visual_sgraphs-path]:/workspace/src/visual_sgraphs:rw"
-    entrypoint: ""
-    restart: "no"
+  #   depends_on:
+  #     - volume-init
+  # # volume-init:
+  #   image: busybox
+  #   command: ["chown", "-R", "1000:1000", "/home/asier/ros2_ws"]
+  #   volumes:
+  #     # Working Directories (** MODIFY **)
+  #     - "/home/asier/mydockers/ubuntu24/ros_ws:/home/asier/ros2_ws"
+  #   entrypoint: ""
+  #   restart: "no"
