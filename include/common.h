@@ -113,8 +113,13 @@
 #include "Semantic/Marker.h"
 
 // Custom Messages
-#include <orb_slam3_ros/VSGraphsAllWallsData.h>
-#include <orb_slam3_ros/VSGraphsAllDetectdetRooms.h>
+// #include <orb_slam3_ros/VSGraphsAllWallsData.h>
+// #include <orb_slam3_ros/VSGraphsAllDetectdetRooms.h>
+
+#include <orb_slam3_ros/msg/vs_graphs_all_walls_data.hpp>
+#include <orb_slam3_ros/msg/vs_graphs_wall_data.hpp>
+#include <orb_slam3_ros/msg/vs_graphs_room_data.hpp>
+#include <orb_slam3_ros/msg/vs_graphs_all_detectdet_rooms.hpp>
 
 using json = nlohmann::json;
 
